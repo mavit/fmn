@@ -4,7 +4,7 @@ import fedmsg
 import fmn.lib.pkgdb
 
 
-def user_filter(config, message, fasnick=None, *args, **kw):
+def generic_user_filter(config, message, fasnick=None, *args, **kw):
     """ All messages for a certain user
 
     Use this rule to include messages that are associated with a
@@ -16,7 +16,7 @@ def user_filter(config, message, fasnick=None, *args, **kw):
         return fasnick in fedmsg.meta.msg2usernames(message)
 
 
-def user_package_filter(config, message, fasnick=None, *args, **kw):
+def generic_user_package_filter(config, message, fasnick=None, *args, **kw):
     """ All messages concerning user's packages
 
     This rule rules out messages that related to packages where the
@@ -29,7 +29,7 @@ def user_package_filter(config, message, fasnick=None, *args, **kw):
         return packages.intersection(fedmsg.meta.msg2packages(message))
 
 
-def package_filter(config, message, package=None, *args, **kw):
+def generic_package_filter(config, message, package=None, *args, **kw):
     """ All messages pertaining to a certain package
 
     Use this rule to include messages that relate to a certain package
