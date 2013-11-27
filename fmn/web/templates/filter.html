@@ -58,14 +58,16 @@
           </div>
         </div>
         {% endif %}
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse"
-            data-parent="#accordion2" href="#collapse{{appfilter}}">
-            {{ appfilter }}
-          </a>
+        <div class="panel-heading">
+          <div class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion"
+              href="#collapse{{appfilter}}">
+              {{ appfilter }}
+            </a>
+          </div>
         </div>
-      <div id="collapse{{appfilter}}" class="accordion-body collapse">
-        <div class="accordion-inner">
+      <div id="collapse{{appfilter}}" class="panel-collapse collapse">
+        <div class="panel-body">
       {% endif %}
           <div class="panel panel-default">
             <div class="panel-heading">
