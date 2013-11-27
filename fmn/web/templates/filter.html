@@ -45,37 +45,57 @@
     pre-defined list.  Click on any rule to check it out.</p>
 
     <div class="panel-group" id="accordion">
+      {% if not appfilter %}
+      {% set appfilter = '' %}
+      {% endif %}
       {% for root in valid_paths %}
       {% for path in valid_paths[root] %}
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{path}}">
-                {{ valid_paths[root][path]['title'] }}
-            </a>
-          </h4>
-        </div>
-        <div id="collapse{{path}}" class="panel-collapse collapse">
-          <div class="panel-body">
-              {{ valid_paths[root][path]['doc'] }}
-              <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
-                  {% for arg in valid_paths[root][path]['args'] %}
-                    {% if arg not in ['config', 'message'] %}
-                      {{arg}}
-                      <input name="{{arg}}" id="arg_{{arg}}" type="text" />
-                    {% endif %}
-                  {% endfor %}
-                <input name="rule_name" id="rule_name" value="{{root}}:{{path}}" type="hidden">
-                <input name="openid" id="openid" value="{{openid}}" type="hidden">
-                <input name="context" id="context" value="{{current}}" type="hidden">
-                <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
-                <button type="submit" class="btn btn-success">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    Add this rule</button>
-              </form>
+      {% if appfilter != path.split('_')[0] %}
+        {% if appfilter == '' %}
+        {% set appfilter = path.split('_')[0] %}
+        {% else %}
+          {% set appfilter = path.split('_')[0] %}
           </div>
         </div>
-      </div>
+        {% endif %}
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse"
+            data-parent="#accordion2" href="#collapse{{appfilter}}">
+            {{ appfilter }}
+          </a>
+        </div>
+      <div id="collapse{{appfilter}}" class="accordion-body collapse">
+        <div class="accordion-inner">
+      {% endif %}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{path}}">
+                    {{ valid_paths[root][path]['title'] }}
+                </a>
+              </h4>
+            </div>
+            <div id="collapse{{path}}" class="panel-collapse collapse">
+              <div class="panel-body">
+                  {{ valid_paths[root][path]['doc'] }}
+                  <form class="form-inline" role="form" action="{{url_for('handle_rule')}}" method="post">
+                      {% for arg in valid_paths[root][path]['args'] %}
+                        {% if arg not in ['config', 'message'] %}
+                          {{arg}}
+                          <input name="{{arg}}" id="arg_{{arg}}" type="text" />
+                        {% endif %}
+                      {% endfor %}
+                    <input name="rule_name" id="rule_name" value="{{root}}:{{path}}" type="hidden">
+                    <input name="openid" id="openid" value="{{openid}}" type="hidden">
+                    <input name="context" id="context" value="{{current}}" type="hidden">
+                    <input name="filter_name" id="filter_name" value="{{filter.name}}" type="hidden">
+                    <button type="submit" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Add this rule</button>
+                  </form>
+              </div>
+            </div>
+          </div>
       {% endfor %}
       {% endfor %}
     </div>
