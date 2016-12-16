@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fmn.rules.taskotron &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fmn.rules.taskotron</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">fmn.lib.hinting</span> <span class="k">import</span> <span class="n">hint</span><span class="p">,</span> <span class="n">prefixed</span> <span class="k">as</span> <span class="n">_</span>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;taskotron.result.new&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="taskotron_result_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.taskotron.taskotron_result_new">[docs]</a><span class="k">def</span> <span class="nf">taskotron_result_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; New taskotron task result</span>
+
+<span class="sd">    This rule lets through messages from the `taskotron</span>
+<span class="sd">    &lt;https://taskotron.fedoraproject.org&gt;`_ about new task result.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;taskotron.result.new&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;taskotron&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="taskotron_task"><a class="viewcode-back" href="../../../rules.html#fmn.rules.taskotron.taskotron_task">[docs]</a><span class="k">def</span> <span class="nf">taskotron_task</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Particular taskotron task</span>
+
+<span class="sd">    With this rule, you can limit messages to only those of particular</span>
+<span class="sd">    `taskotron &lt;https://taskotron.fedoraproject.org/&gt;`_ task.</span>
+
+<span class="sd">    You can specify several tasks by separating them with a comma &#39;,&#39;,</span>
+<span class="sd">    i.e.: ``dist.depcheck,dist.rpmlint``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We only operate on taskotron messages, first off.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">taskotron_result_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;task&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">tasks</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;taskotron&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="taskotron_changed_outcome"><a class="viewcode-back" href="../../../rules.html#fmn.rules.taskotron.taskotron_changed_outcome">[docs]</a><span class="k">def</span> <span class="nf">taskotron_changed_outcome</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Taskotron task outcome changed</span>
+
+<span class="sd">    With this rule, you can limit messages to only those task results</span>
+<span class="sd">    with changed outcomes. This is useful when an object (a build,</span>
+<span class="sd">    an update, etc) gets retested and either the object itself or the</span>
+<span class="sd">    environment changes and the task outcome is now different (e.g.</span>
+<span class="sd">    FAILED -&gt; PASSED).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We only operate on taskotron messages, first off.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">taskotron_result_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">outcome</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;result&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;outcome&#39;</span><span class="p">)</span>
+    <span class="n">prev_outcome</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;result&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;prev_outcome&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">prev_outcome</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">outcome</span> <span class="o">!=</span> <span class="n">prev_outcome</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;taskotron&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="taskotron_task_outcome"><a class="viewcode-back" href="../../../rules.html#fmn.rules.taskotron.taskotron_task_outcome">[docs]</a><span class="k">def</span> <span class="nf">taskotron_task_outcome</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Particular taskotron task outcome</span>
+
+<span class="sd">    With this rule, you can limit messages to only those of particular</span>
+<span class="sd">    `taskotron &lt;https://taskotron.fedoraproject.org/&gt;`_ task outcome.</span>
+
+<span class="sd">    You can specify several outcomes by separating them with a comma &#39;,&#39;,</span>
+<span class="sd">    i.e.: ``PASSED,FAILED``.</span>
+
+<span class="sd">    The full list of supported outcomes can be found in the libtaskotron</span>
+<span class="sd">    `documentation &lt;https://docs.qadevel.cloud.fedoraproject.org/</span>
+<span class="sd">    libtaskotron/latest/resultyaml.html#minimal-version&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We only operate on taskotron messages, first off.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">taskotron_result_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">outcome</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">outcomes</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">outcome</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;result&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;outcome&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">outcomes</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;taskotron&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="taskotron_task_particular_or_changed_outcome"><a class="viewcode-back" href="../../../rules.html#fmn.rules.taskotron.taskotron_task_particular_or_changed_outcome">[docs]</a><span class="k">def</span> <span class="nf">taskotron_task_particular_or_changed_outcome</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span>
+                                                 <span class="n">outcome</span><span class="o">=</span><span class="s1">&#39;FAILED,NEEDS_INSPECTION&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Taskotron task any particular or changed outcome(s)</span>
+
+<span class="sd">    With this rule, you can limit messages to only those task results</span>
+<span class="sd">    with any particular outcome(s) (FAILED and NEEDS_INSPECTION by default)</span>
+<span class="sd">    or those with changed outcomes. This rule is a handy way of filtering</span>
+<span class="sd">    a very useful use case - being notified when either task requires</span>
+<span class="sd">    your attention or the outcome has changed since the last time the task</span>
+<span class="sd">    ran for the same item (e.g. a koji build).</span>
+
+<span class="sd">    You can specify several outcomes by separating them with a comma &#39;,&#39;,</span>
+<span class="sd">    i.e.: ``PASSED,FAILED``.</span>
+
+<span class="sd">    The full list of supported outcomes can be found in the libtaskotron</span>
+<span class="sd">    `documentation &lt;https://docs.qadevel.cloud.fedoraproject.org/</span>
+<span class="sd">    libtaskotron/latest/resultyaml.html#minimal-version&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">taskotron_task_outcome</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">outcome</span><span class="p">)</span> <span class="ow">or</span> \
+           <span class="n">taskotron_changed_outcome</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;taskotron&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="taskotron_release_critical_task"><a class="viewcode-back" href="../../../rules.html#fmn.rules.taskotron.taskotron_release_critical_task">[docs]</a><span class="k">def</span> <span class="nf">taskotron_release_critical_task</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Release-critical taskotron tasks</span>
+
+<span class="sd">    With this rule, you can limit messages to only those of</span>
+<span class="sd">    release-critical</span>
+<span class="sd">    `taskotron &lt;https://taskotron.fedoraproject.org/&gt;`_ task.</span>
+
+<span class="sd">    These are the tasks which are deemed extremely important</span>
+<span class="sd">    by the distribution, and their failure should be carefully</span>
+<span class="sd">    inspected. Currently these tasks are ``dist.depcheck`` and</span>
+<span class="sd">    ``dist.upgradepath``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We only operate on taskotron messages, first off.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">taskotron_result_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">task</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;task&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">task</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;dist.depcheck&#39;</span><span class="p">,</span> <span class="s1">&#39;dist.upgradepath&#39;</span><span class="p">]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fmn.rules.buildsys &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fmn.rules.buildsys</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">fmn.lib.hinting</span> <span class="k">import</span> <span class="n">hint</span><span class="p">,</span> <span class="n">prefixed</span> <span class="k">as</span> <span class="n">_</span>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;buildsys&#39;</span><span class="p">])</span>
+<div class="viewcode-block" id="koji_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_catchall">[docs]</a><span class="k">def</span> <span class="nf">koji_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; All Koji events</span>
+
+<span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
+<span class="sd">    from the `koji build system &lt;http://koji.fedoraproject.org&gt;`_, i.e. new</span>
+<span class="sd">    and finished *real* builds, new and finished scratch builds, internal</span>
+<span class="sd">    repository regeneration, etc..</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;buildsys&#39;</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;buildsys&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_instance"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_instance">[docs]</a><span class="k">def</span> <span class="nf">koji_instance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Particular koji instances</span>
+
+<span class="sd">    You may not have even known it, but we have multiple instances of the koji</span>
+<span class="sd">    build system.  There is the **primary** buildsystem at</span>
+<span class="sd">    `koji.fedoraproject.org &lt;http://koji.fedoraproject.org&gt;`_ and also</span>
+<span class="sd">    secondary instances for `ppc &lt;http://ppc.koji.fedoraproject.org&gt;`_, `arm</span>
+<span class="sd">    &lt;http://arm.koji.fedoraproject.org&gt;`_, and `s390</span>
+<span class="sd">    &lt;http://s390.koji.fedoraproject.org&gt;`_.</span>
+
+<span class="sd">    With this rule, you can limit messages to only those from particular koji</span>
+<span class="sd">    instances (like the **primary** one if you want to ignore the secondary</span>
+<span class="sd">    ones).  You should use this rule **in combination** with other koji rules</span>
+<span class="sd">    so you get only a *certain subset* of messages from one instance.  You</span>
+<span class="sd">    almost certainly do not want **all** messages from a given instance.</span>
+
+<span class="sd">    You can specify several instances by separating them with a comma &#39;,&#39;,</span>
+<span class="sd">    i.e.: ``primary,ppc``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance&#39;</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">instances</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">instances</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="koji_scratch_build_state_change"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_state_change">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Scratch builds changing state (any state)</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ about **scratch** build state</span>
+<span class="sd">    state changes (any state at all:  started, completed, failed, cancelled).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_scratch_build_started"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_started">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_started</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Scratch builds starting</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime a</span>
+<span class="sd">    **scratch** build starts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_scratch_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;OPEN&#39;</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_scratch_build_completed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_completed">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_completed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Scratch builds completing</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime a</span>
+<span class="sd">    **scratch** build completes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_scratch_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CLOSED&#39;</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_scratch_build_failed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_failed">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_failed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Scratch builds failing</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime a</span>
+<span class="sd">    **scratch** build fails.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_scratch_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;FAILED&#39;</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_scratch_build_cancelled"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_cancelled">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_cancelled</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Scratch builds being cancelled</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime a</span>
+<span class="sd">    **scratch** build is cancelled.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_scratch_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;CANCELED&#39;</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="koji_build_state_change"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_state_change">[docs]</a><span class="k">def</span> <span class="nf">koji_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Builds changing state (any state)</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime a</span>
+<span class="sd">    build changes state.  The state could be anything:  started, completed,</span>
+<span class="sd">    deleted, failed, or cancelled.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_build_started"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_started">[docs]</a><span class="k">def</span> <span class="nf">koji_build_started</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Builds starting</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime **a</span>
+<span class="sd">    build starts**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_build_completed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_completed">[docs]</a><span class="k">def</span> <span class="nf">koji_build_completed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Builds completing</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime **a</span>
+<span class="sd">    build completes**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_build_deleted"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_deleted">[docs]</a><span class="k">def</span> <span class="nf">koji_build_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Builds being deleted</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime **a</span>
+<span class="sd">    build is deleted**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_build_failed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_failed">[docs]</a><span class="k">def</span> <span class="nf">koji_build_failed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Builds failing</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime **a</span>
+<span class="sd">    build fails**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="koji_build_cancelled"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_cancelled">[docs]</a><span class="k">def</span> <span class="nf">koji_build_cancelled</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Builds being cancelled</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ that get published anytime **a</span>
+<span class="sd">    build is cancelled**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">koji_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;new&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.package.list.change&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="koji_package_list_change"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_package_list_change">[docs]</a><span class="k">def</span> <span class="nf">koji_package_list_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Koji &quot;package list&quot; changes</span>
+
+<span class="sd">    This rule lets through messages from the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ indicating that the package</span>
+<span class="sd">    listing for a tag has changed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;buildsys.package.list.change&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.repo.done&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="koji_repo_done"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_repo_done">[docs]</a><span class="k">def</span> <span class="nf">koji_repo_done</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Koji repo regeneration (complete)</span>
+
+<span class="sd">    This rule lets through messages indicating that the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ has **finished** rebuilding a</span>
+<span class="sd">    repo.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;buildsys.repo.done&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.repo.init&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="koji_repo_init"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_repo_init">[docs]</a><span class="k">def</span> <span class="nf">koji_repo_init</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Koji repo regeneration (start)</span>
+
+<span class="sd">    This rule lets through messages indicating that the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ has **started** rebuilding a</span>
+<span class="sd">    repo.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;buildsys.repo.init&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.tag&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="koji_tag"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_tag">[docs]</a><span class="k">def</span> <span class="nf">koji_tag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Packages are added to a Koji tag</span>
+
+<span class="sd">    This rule lets through messages that get published when the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ applies a certain tag to a</span>
+<span class="sd">    package.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;buildsys.tag&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.untag&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="koji_untag"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_untag">[docs]</a><span class="k">def</span> <span class="nf">koji_untag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Packages are removed from a Koji tag</span>
+
+<span class="sd">    This rule lets through messages that get published when the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ removes a tag from a</span>
+<span class="sd">    package.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;buildsys.untag&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.rpm.sign&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="koji_rpm_sign"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_rpm_sign">[docs]</a><span class="k">def</span> <span class="nf">koji_rpm_sign</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Packages are gpg signed in koji.</span>
+
+<span class="sd">    This rule lets through messages that get published when the `koji build</span>
+<span class="sd">    system &lt;http://koji.fedoraproject.org&gt;`_ imports the gpg signature of an</span>
+<span class="sd">    rpm.  This is done *en masse* by the `sigul signing server</span>
+<span class="sd">    &lt;https://fedorahosted.org/sigul&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;buildsys.rpm.sign&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

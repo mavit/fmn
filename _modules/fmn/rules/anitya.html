@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fmn.rules.anitya &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fmn.rules.anitya</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">from</span> <span class="nn">fmn.lib.hinting</span> <span class="k">import</span> <span class="n">hint</span><span class="p">,</span> <span class="n">prefixed</span> <span class="k">as</span> <span class="n">_</span>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.version.update&#39;</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="anitya_unmapped_new_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_unmapped_new_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_unmapped_new_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; New releases of upstream projects that have no mapping to Fedora</span>
+
+<span class="sd">    Adding this rule will let through events when new upstream releases are</span>
+<span class="sd">    detected, but only on upstream projects that have no mapping to Fedora</span>
+<span class="sd">    Packages.  This could be useful to you if you want to monitor</span>
+<span class="sd">    release-monitoring.org itself and watch for projects that might need help</span>
+<span class="sd">    adjusting their metadata.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">anitya_new_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;message&#39;</span><span class="p">][</span><span class="s1">&#39;packages&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">package</span><span class="p">[</span><span class="s1">&#39;distro&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;fedora&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># If none of the packages were listed as Fedora, then this is unmapped.</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;anitya&#39;</span><span class="p">])</span>
+<div class="viewcode-block" id="anitya_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_catchall">[docs]</a><span class="k">def</span> <span class="nf">anitya_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; All release-monitoring.org events</span>
+
+<span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
+<span class="sd">    from `release-monitoring.org &lt;https://release-monitoring.org&gt;`_ (also</span>
+<span class="sd">    called &quot;anitya&quot;), i.e. notices of new upstream tarball releases, changes to</span>
+<span class="sd">    package/project mappings, new distributions being added, etc..</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;anitya&#39;</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;anitya&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="anitya_specific_distro"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_specific_distro">[docs]</a><span class="k">def</span> <span class="nf">anitya_specific_distro</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">distro</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Distro-specific release-monitoring.org events</span>
+
+<span class="sd">    This rule will match all anitya events *only for a particular distro*.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">distro</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">anitya_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;distro&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="n">d</span><span class="p">:</span>  <span class="c1"># Have to be careful for None here</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">distro</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="n">p</span><span class="p">:</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;distro&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="n">d</span><span class="p">:</span>  <span class="c1"># Have to be careful for None here</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">distro</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;packages&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="n">pkg</span><span class="p">[</span><span class="s1">&#39;distro&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">distro</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.distro.add&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_distro_add"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_distro_add">[docs]</a><span class="k">def</span> <span class="nf">anitya_distro_add</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; New distributions added to release-monitoring.org</span>
+
+<span class="sd">    Adding this rule will trigger notifications when a new distribution is</span>
+<span class="sd">    **added** to `anitya &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.distro.add&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.distro.edit&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_distro_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_distro_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_distro_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Anitya distributions updated</span>
+
+<span class="sd">    Adding this rule will trigger notifications when a distribution is</span>
+<span class="sd">    **updated** in `anitya &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.distro.edit&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.add&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_project_add"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_project_add">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_add</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; New projects added to release-monitoring.org</span>
+
+<span class="sd">    Adding this rule will trigger notifications when a project is **added**</span>
+<span class="sd">    to `anitya &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.add&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.add.tried&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_project_add_tried"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_project_add_tried">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_add_tried</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Attempts to add new projects to release-monitoring.org</span>
+
+<span class="sd">    Adding this rule will trigger notifications when a project is tried to</span>
+<span class="sd">    be **added** to `anitya &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.add.tried&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.edit&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_project_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_project_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Updates to projects on release-monitoring.org</span>
+
+<span class="sd">    Adding this rule will trigger notifications when a project is **updated**</span>
+<span class="sd">    in `anitya &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.edit&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.new&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_mapping_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_mapping_new">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; When upstream projects are mapped to downstream packages</span>
+
+<span class="sd">    Adding this rule will trigger notifications when a new mapping of a</span>
+<span class="sd">    project to a distribution is **added** in `anitya</span>
+<span class="sd">    &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.new&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.update&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_mapping_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_mapping_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Updates to anitya&#39;s upstream/downstream mappings</span>
+
+<span class="sd">    Adding this rule will trigger notifications when the mapping of a</span>
+<span class="sd">    project to a distribution is **updated** in `anitya</span>
+<span class="sd">    &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.update&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.remove&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_mapping_deleted"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_mapping_deleted">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; When upstream/downstream mappings are deleted</span>
+
+<span class="sd">    Adding this rule will trigger notifications when the mapping of a</span>
+<span class="sd">    project in a distribution is **deleted** in `anitya</span>
+<span class="sd">    &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.remove&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.remove&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_project_deleted"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_project_deleted">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; When upstream projects are deleted from anitya</span>
+
+<span class="sd">    Adding this rule will trigger notifications when a project is **deleted**</span>
+<span class="sd">    to `anitya &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.remove&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.version.update&#39;</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_new_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_new_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_new_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; When new upstream releases are detected</span>
+
+<span class="sd">    Adding this rule will trigger notifications when a project has a</span>
+<span class="sd">    **new release** according to `anitya &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.version.update&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.update&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="anitya_info_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_info_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_info_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; When an upstream project&#39;s metadata is updated</span>
+
+<span class="sd">    Adding this rule will trigger notifications when the information about</span>
+<span class="sd">    a project are **updated** in `anitya &lt;https://release-monitoring.org&gt;`_.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.update&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="anitya_by_upstream_project"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_by_upstream_project">[docs]</a><span class="k">def</span> <span class="nf">anitya_by_upstream_project</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">projects</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Anything regarding a particular &quot;upstream project&quot;</span>
+
+<span class="sd">    Adding this rule will let through *any* anitya notification that pertains</span>
+<span class="sd">    to a particular &quot;upstream project&quot;.  Note that the &quot;project&quot; name is often</span>
+<span class="sd">    different from the distro &quot;package&quot; name.  For instance, the package</span>
+<span class="sd">    python-requests in Fedora will have the upstream project name &quot;requests&quot;.</span>
+
+<span class="sd">    You can specify a comma-separated list of upstream project names here.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># We only deal in anitya messages, first off.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">anitya_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">projects</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projects</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Get the project for the message.</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;msg&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Split the string into a list of targets</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">projects</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+    <span class="c1"># Filter out empty strings if someone is putting &#39;,,,&#39; garbage in</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">target</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">targets</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

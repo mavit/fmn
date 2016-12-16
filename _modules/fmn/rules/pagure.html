@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fmn.rules.pagure &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fmn.rules.pagure</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">fmn.lib.hinting</span> <span class="k">import</span> <span class="n">hint</span><span class="p">,</span> <span class="n">prefixed</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="kn">import</span> <span class="nn">fedmsg.meta</span>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pagure&#39;</span><span class="p">])</span>
+<div class="viewcode-block" id="pagure_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_catchall">[docs]</a><span class="k">def</span> <span class="nf">pagure_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; All pagure.io activity</span>
+
+<span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
+<span class="sd">    from `pagure &lt;https://pagure.io&gt;`_ (but only the repositories that have the</span>
+<span class="sd">    fedmsg hook enabled).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pagure&#39;</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pagure&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="pagure_specific_project_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_specific_project_filter">[docs]</a><span class="k">def</span> <span class="nf">pagure_specific_project_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Particular pagure projects</span>
+
+<span class="sd">     Adding this rule allows you to get notifications for one or more</span>
+<span class="sd">     `pagure.io &lt;https://pagure.io&gt;`_ projects. Specify multiple</span>
+<span class="sd">     projects by separating them with a comma &#39;,&#39;.</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pagure_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">project</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">fedmsg</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">msg2link</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">link</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">project</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">project</span> <span class="k">else</span> <span class="p">[]</span>
+
+    <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">proj</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;://pagure.io/</span><span class="si">%s</span><span class="s1">/&#39;</span> <span class="o">%</span> <span class="n">proj</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">in</span> <span class="n">link</span><span class="p">:</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">valid</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pagure&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="pagure_specific_project_tag_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_specific_project_tag_filter">[docs]</a><span class="k">def</span> <span class="nf">pagure_specific_project_tag_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Particular pagure project tags</span>
+
+<span class="sd">     Adding this rule allows you to get notifications for one or more</span>
+<span class="sd">     `pagure.io &lt;https://pagure.io&gt;`_ projects having the specified tags.</span>
+<span class="sd">     Specify multiple tags by separating them with a comma &#39;,&#39;.</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pagure_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">tags</span> <span class="k">else</span> <span class="p">[]</span>
+    <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span> <span class="k">if</span> <span class="n">tag</span> <span class="ow">and</span> <span class="n">tag</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+
+    <span class="n">project_tags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">project_tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tags&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">project_tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pullrequest&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tags&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">project_tags</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;commit&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;repo&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tags&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+
+    <span class="n">valid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">project_tags</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">tags</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">valid</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.new&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_project_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; New pagure projects</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a new project is added**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.project.new&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.new&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; New pagure issues</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **new issues are filed**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.new&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.comment.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_comment_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_comment_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_comment_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Comments on pagure issues</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **comments are added to</span>
+<span class="sd">    issues**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.comment.added&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.tag.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_tag_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_tag_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_tag_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Tags added to pagure issues</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **tags are added to issues**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.tag.added&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.tag.removed&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_tag_removed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_tag_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_tag_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Tags removed from pagure issues</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **tags are removed from</span>
+<span class="sd">    issues**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.tag.removed&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.assigned.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_assigned_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_assigned_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_assigned_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Someone is assigned to a pagure issue</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **someone is assigned</span>
+<span class="sd">    to an issue**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.assigned.added&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.assigned.reset&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_assigned_reset"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_assigned_reset">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_assigned_reset</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The assignment on a pagure issue is reset</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **the assignment on</span>
+<span class="sd">    an issue is reset**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.assigned.reset&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.dependency.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_dependency_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_dependency_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_dependency_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A dep was added to a pagure issue</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a dependency is added to a</span>
+<span class="sd">    pagure issue**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.dependency.added&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.dependency.removed&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_dependency_removed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_dependency_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_dependency_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A dep was removed from a pagure issue</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a dependency is removed</span>
+<span class="sd">    from a pagure issue**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.dependency.removed&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.edit&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_issue_edit"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_edit">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_edit</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Issues being edited</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **issues are edited**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.issue.edit&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.edit&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_project_edit"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_edit">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_edit</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Projects being edited</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **project details are edited**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.project.edit&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.user.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_project_user_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_user_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_user_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; New users added to a project</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a new user is added to a</span>
+<span class="sd">    project**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.project.user.added&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.tag.removed&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_project_tag_removed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_tag_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_tag_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Tags removed from a project</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a tags are removed from a</span>
+<span class="sd">    project**.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.project.tag.removed&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.tag.edited&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_project_tag_edited"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_tag_edited">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_tag_edited</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Tags edited on a project</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a project&#39;s tags are edited**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.project.tag.edited&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.forked&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_project_forked"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_forked">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_forked</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A project is forked</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a project is forked**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.project.forked&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.comment.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_pull_request_comment_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_comment_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_comment_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Comments on pull requests</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **there&#39;s a new comment on a</span>
+<span class="sd">    pull-request**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.comment.added&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.closed&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_pull_request_closed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_closed">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_closed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A pull request is closed</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a pull request is closed**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.closed&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.new&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_pull_request_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A pull request is created</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a pull request is opened**.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.new&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.flag.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_pull_request_flag_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_flag_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_flag_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A flag is added to a pull request</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a flag is added to a pull</span>
+<span class="sd">    request**.  These are continuous-integration status updates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.flag.added&#39;</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.flag.updated&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
+<div class="viewcode-block" id="pagure_pull_request_flag_updated"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_flag_updated">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_flag_updated</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A flag is updated on a pull request</span>
+
+<span class="sd">    Adding this rule to your filters will let through messages</span>
+<span class="sd">    from `pagure.io &lt;https://pagure.io&gt;`_ when **a flag is updated on a pull</span>
+<span class="sd">    request**.  These are continuous-integration status updates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.flag.updated&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

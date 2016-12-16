@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fmn.rules.generic &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fmn.rules.generic</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Generic rules for FMN</span>
+
+<span class="kn">import</span> <span class="nn">fedmsg</span>
+<span class="kn">import</span> <span class="nn">fedmsg.encoding</span>
+<span class="kn">import</span> <span class="nn">fedmsg.meta</span>
+
+<span class="kn">import</span> <span class="nn">fmn.rules.utils</span>
+<span class="kn">from</span> <span class="nn">fmn.lib.hinting</span> <span class="k">import</span> <span class="n">hint</span>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">callable</span><span class="o">=</span><span class="k">lambda</span> <span class="n">config</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">users</span><span class="o">=</span><span class="p">[</span><span class="n">fasnick</span><span class="p">]))</span>
+<div class="viewcode-block" id="user_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.user_filter">[docs]</a><span class="k">def</span> <span class="nf">user_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">fasnick</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A particular user</span>
+
+<span class="sd">    Use this rule to include messages that are associated with a</span>
+<span class="sd">    specific user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fasnick</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fasnick&#39;</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fasnick</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fasnick</span> <span class="ow">in</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">msg2usernames</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">callable</span><span class="o">=</span><span class="k">lambda</span> <span class="n">config</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">not_users</span><span class="o">=</span><span class="p">[</span><span class="n">fasnick</span><span class="p">]),</span>
+      <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="not_user_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.not_user_filter">[docs]</a><span class="k">def</span> <span class="nf">not_user_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">fasnick</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Everything except a particular user</span>
+
+<span class="sd">    Use this rule to exclude messages that are associated with one or more</span>
+<span class="sd">    users. Specify several users by separating them with a comma &#39;,&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fasnick</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fasnick&#39;</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fasnick</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">fasnick</span> <span class="o">=</span> <span class="p">(</span><span class="n">fasnick</span> <span class="ow">or</span> <span class="p">[])</span> <span class="ow">and</span> <span class="n">fasnick</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">nick</span> <span class="ow">in</span> <span class="n">fasnick</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nick</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">in</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">msg2usernames</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">):</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">valid</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_users_of_group</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Utility to query fas for users of a group. &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">group</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">fas</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_fas</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_user_of_group</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">fas</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">callable</span><span class="o">=</span><span class="n">_get_users_of_group</span><span class="p">)</span>
+<div class="viewcode-block" id="fas_group_member_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.fas_group_member_filter">[docs]</a><span class="k">def</span> <span class="nf">fas_group_member_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Messages regarding any member of a FAS group</span>
+
+<span class="sd">    Use this rule to include messages that have anything to do with **any</span>
+<span class="sd">    user** belonging to a particular fas group.  You might want to use this</span>
+<span class="sd">    to monitor the activity of a group for which you are responsible.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">group</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">fasusers</span> <span class="o">=</span> <span class="n">_get_users_of_group</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
+    <span class="n">msgusers</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">msg2usernames</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">fasusers</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">msgusers</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_user_package_filter_hint</span><span class="p">(</span><span class="n">flags</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">hint_callable</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">):</span>
+        <span class="n">packages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_packages_of_user</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">packages</span><span class="o">=</span><span class="n">packages</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hint_callable</span>
+
+
+<span class="n">all_acls</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;point of contact&#39;</span><span class="p">,</span> <span class="s1">&#39;co-maintained&#39;</span><span class="p">,</span> <span class="s1">&#39;watch&#39;</span><span class="p">]</span>
+<span class="nd">@hint</span><span class="p">(</span><span class="n">callable</span><span class="o">=</span><span class="n">_user_package_filter_hint</span><span class="p">(</span><span class="n">all_acls</span><span class="p">))</span>
+<div class="viewcode-block" id="user_package_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.user_package_filter">[docs]</a><span class="k">def</span> <span class="nf">user_package_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">fasnick</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A particular user&#39;s packages (any acl)</span>
+
+<span class="sd">    This rule includes messages that relate to packages where the</span>
+<span class="sd">    specified user has *either* commit ACLs or the watchcommits flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fasnick</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fasnick&#39;</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fasnick</span><span class="p">:</span>
+        <span class="n">msg_packages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">msg2packages</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">msg_packages</span><span class="p">:</span>
+            <span class="c1"># If the message has no packages associated with it, there&#39;s no</span>
+            <span class="c1"># way that &quot;one of them&quot; is going to happen to belong to this user,</span>
+            <span class="c1"># so let&#39;s not waste our time doing the somewhat expensive call out</span>
+            <span class="c1"># to pkgdb on the next line to check.</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">usr_packages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_packages_of_user</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">,</span> <span class="n">all_acls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">usr_packages</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">msg_packages</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+<span class="n">only_commit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;point of contact&#39;</span><span class="p">,</span> <span class="s1">&#39;co-maintained&#39;</span><span class="p">]</span>
+<span class="nd">@hint</span><span class="p">(</span><span class="n">callable</span><span class="o">=</span><span class="n">_user_package_filter_hint</span><span class="p">(</span><span class="n">only_commit</span><span class="p">))</span>
+<div class="viewcode-block" id="user_package_commit_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.user_package_commit_filter">[docs]</a><span class="k">def</span> <span class="nf">user_package_commit_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">fasnick</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A particular user&#39;s packages (commit acl)</span>
+
+<span class="sd">    This rule includes messages that relate to packages where the</span>
+<span class="sd">    specified user has commit ACLs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fasnick</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fasnick&#39;</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fasnick</span><span class="p">:</span>
+        <span class="n">msg_packages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">msg2packages</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">msg_packages</span><span class="p">:</span>
+            <span class="c1"># If the message has no packages associated with it, there&#39;s no</span>
+            <span class="c1"># way that &quot;one of them&quot; is going to happen to belong to this user,</span>
+            <span class="c1"># so let&#39;s not waste our time doing the somewhat expensive call out</span>
+            <span class="c1"># to pkgdb on the next line to check.</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">usr_packages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_packages_of_user</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">,</span> <span class="n">only_commit</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">usr_packages</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">msg_packages</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="n">only_watchcommits</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;watch&#39;</span><span class="p">]</span>
+<span class="nd">@hint</span><span class="p">(</span><span class="n">callable</span><span class="o">=</span><span class="n">_user_package_filter_hint</span><span class="p">(</span><span class="n">only_watchcommits</span><span class="p">))</span>
+<div class="viewcode-block" id="user_package_watch_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.user_package_watch_filter">[docs]</a><span class="k">def</span> <span class="nf">user_package_watch_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">fasnick</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A particular user&#39;s packages (watchcommits flag)</span>
+
+<span class="sd">    This rule includes messages that relate to packages where the</span>
+<span class="sd">    specified user has the watchcommits flag set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fasnick</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fasnick&#39;</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fasnick</span><span class="p">:</span>
+        <span class="n">msg_packages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">msg2packages</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">msg_packages</span><span class="p">:</span>
+            <span class="c1"># If the message has no packages associated with it, there&#39;s no</span>
+            <span class="c1"># way that &quot;one of them&quot; is going to happen to belong to this user,</span>
+            <span class="c1"># so let&#39;s not waste our time doing the somewhat expensive call out</span>
+            <span class="c1"># to pkgdb on the next line to check.</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">usr_packages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_packages_of_user</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">,</span> <span class="n">fasnick</span><span class="p">,</span> <span class="n">only_watchcommits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">usr_packages</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">msg_packages</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">callable</span><span class="o">=</span><span class="k">lambda</span> <span class="n">config</span><span class="p">,</span> <span class="n">package</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="n">package</span><span class="p">]))</span>
+<div class="viewcode-block" id="package_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.package_filter">[docs]</a><span class="k">def</span> <span class="nf">package_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A particular package</span>
+
+<span class="sd">    Use this rule to include messages that relate to a certain package</span>
+<span class="sd">    (*i.e., nethack*).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">package</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;package&#39;</span><span class="p">,</span> <span class="n">package</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">package</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">msg2packages</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span></div>
+
+
+<span class="c1"># Can&#39;t hint this one.  Can&#39;t pass a regex on to postgres</span>
+<div class="viewcode-block" id="package_regex_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.package_regex_filter">[docs]</a><span class="k">def</span> <span class="nf">package_regex_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; All packages matching a regular expression</span>
+
+<span class="sd">    Use this rule to include messages that relate to packages that match</span>
+<span class="sd">    particular regular expressions</span>
+<span class="sd">    (*i.e., (maven|javapackages-tools|maven-surefire)*).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pattern&#39;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+        <span class="n">packages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">msg2packages</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">compile_regex</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">([</span><span class="n">regex</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">packages</span><span class="p">])</span></div>
+
+
+<span class="c1"># Can&#39;t hint this one.  Can&#39;t pass a regex on to postgres</span>
+<div class="viewcode-block" id="regex_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.regex_filter">[docs]</a><span class="k">def</span> <span class="nf">regex_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; All messages matching a regular expression</span>
+
+<span class="sd">    Use this rule to include messages that bear a certain pattern.</span>
+<span class="sd">    This can be anything that appears anywhere in the message (for instance,</span>
+<span class="sd">    you could combine this with rules for wiki updates or Ask Fedora changes</span>
+<span class="sd">    to alert yourself of activity in your area of expertise).</span>
+
+<span class="sd">    (*i.e., (beefy miracle)*).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pattern&#39;</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">compile_regex</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">regex</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="n">fedmsg</span><span class="o">.</span><span class="n">encoding</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="p">))</span></div>
+
+
+<span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;trac&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="trac_hosted_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.generic.trac_hosted_filter">[docs]</a><span class="k">def</span> <span class="nf">trac_hosted_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Particular fedorahosted projects</span>
+
+<span class="sd">     Adding this rule allows you to get notifications for one or more</span>
+<span class="sd">     `fedorahosted &lt;https://fedorahosted.org&gt;`_ projects. Specify multiple</span>
+<span class="sd">     projects by separating them with a comma &#39;,&#39;.</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">fedmsg</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">msg2link</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">link</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">project</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">project</span> <span class="k">else</span> <span class="p">[]</span>
+
+    <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">proj</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;://fedorahosted.org/</span><span class="si">%s</span><span class="s1">/&#39;</span> <span class="o">%</span> <span class="n">proj</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">in</span> <span class="n">link</span><span class="p">:</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">valid</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
