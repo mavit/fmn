@@ -13,6 +13,7 @@ Table of Contents:
 
    contributing
    architecture
+   rules
    glossary
 
 
