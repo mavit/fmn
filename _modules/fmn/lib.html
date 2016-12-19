@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fmn.lib &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fmn.lib</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Fedora Notifications internal API &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">fmn.lib.hinting</span>
+<span class="kn">import</span> <span class="nn">fmn.lib.models</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">smtplib</span>
+
+<span class="kn">import</span> <span class="nn">bs4</span>
+<span class="kn">import</span> <span class="nn">docutils.examples</span>
+<span class="kn">import</span> <span class="nn">markupsafe</span>
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ordereddict</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="n">irc_regex</span> <span class="o">=</span> <span class="s1">r&#39;[a-zA-Z_\-\[\]</span><span class="se">\\</span><span class="s1">^</span><span class="si">{}</span><span class="s1">|`][a-zA-Z0-9_\-\[\]</span><span class="se">\\</span><span class="s1">^</span><span class="si">{}</span><span class="s1">|`]*&#39;</span>
+<span class="n">gcm_regex</span> <span class="o">=</span> <span class="s1">r&#39;^[\w-]+$&#39;</span>
+
+
+<div class="viewcode-block" id="recipients"><a class="viewcode-back" href="../../reference/fmn.lib.html#fmn.lib.recipients">[docs]</a><span class="k">def</span> <span class="nf">recipients</span><span class="p">(</span><span class="n">preferences</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">valid_paths</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The main API function.</span>
+
+<span class="sd">    Accepts a fedmsg message as an argument.</span>
+
+<span class="sd">    Returns a dict mapping context names to lists of recipients.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rule_cache</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">notified</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">preference</span> <span class="ow">in</span> <span class="n">preferences</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">preference</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">preference</span><span class="p">[</span><span class="s1">&#39;context&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;openid&#39;</span><span class="p">],</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span> <span class="ow">in</span> <span class="n">notified</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">for</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="n">preference</span><span class="p">[</span><span class="s1">&#39;filters&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">matches</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">valid_paths</span><span class="p">,</span> <span class="n">rule_cache</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">detail_value</span> <span class="ow">in</span> <span class="n">preference</span><span class="p">[</span><span class="s1">&#39;detail_values&#39;</span><span class="p">]:</span>
+                    <span class="n">results</span><span class="p">[</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                        <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;openid&#39;</span><span class="p">],</span>
+                        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;detail_name&#39;</span><span class="p">]:</span> <span class="n">detail_value</span><span class="p">,</span>
+                        <span class="s1">&#39;filter_name&#39;</span><span class="p">:</span> <span class="nb">filter</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;filter_id&#39;</span><span class="p">:</span> <span class="nb">filter</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;filter_oneshot&#39;</span><span class="p">:</span> <span class="nb">filter</span><span class="p">[</span><span class="s1">&#39;oneshot&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;markup_messages&#39;</span><span class="p">:</span> <span class="n">preference</span><span class="p">[</span><span class="s1">&#39;markup_messages&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;triggered_by_links&#39;</span><span class="p">:</span> <span class="n">preference</span><span class="p">[</span><span class="s1">&#39;triggered_by_links&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;shorten_links&#39;</span><span class="p">:</span> <span class="n">preference</span><span class="p">[</span><span class="s1">&#39;shorten_links&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;verbose&#39;</span><span class="p">:</span> <span class="n">preference</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">],</span>
+                    <span class="p">})</span>
+                <span class="n">notified</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;openid&#39;</span><span class="p">],</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]))</span>
+                <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="matches"><a class="viewcode-back" href="../../reference/fmn.lib.html#fmn.lib.matches">[docs]</a><span class="k">def</span> <span class="nf">matches</span><span class="p">(</span><span class="nb">filter</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">valid_paths</span><span class="p">,</span> <span class="n">rule_cache</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns True if the given filter matches the given message. &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">filter</span><span class="p">[</span><span class="s1">&#39;rules&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">[</span><span class="s1">&#39;rules&#39;</span><span class="p">]:</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="s1">&#39;fn&#39;</span><span class="p">]</span>
+        <span class="n">negated</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="s1">&#39;negated&#39;</span><span class="p">]</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="s1">&#39;arguments&#39;</span><span class="p">]</span>
+        <span class="n">rule_cache_key</span> <span class="o">=</span> <span class="n">rule</span><span class="p">[</span><span class="s1">&#39;cache_key&#39;</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rule_cache_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rule_cache</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="o">**</span><span class="n">arguments</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">negated</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">value</span>
+                <span class="n">rule_cache</span><span class="p">[</span><span class="n">rule_cache_key</span><span class="p">]</span> <span class="o">=</span>  <span class="n">value</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rule_cache</span><span class="p">[</span><span class="n">rule_cache_key</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="c1"># If something throws an exception then we do *not* have a match.</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Then all rules matched on this filter..</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="load_preferences"><a class="viewcode-back" href="../../reference/fmn.lib.html#fmn.lib.load_preferences">[docs]</a><span class="k">def</span> <span class="nf">load_preferences</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">valid_paths</span><span class="p">,</span>
+                     <span class="n">cull_disabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">openid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">cull_backends</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Every rule for every filter for every context for every user.</span>
+
+<span class="sd">    Any preferences in the DB that are for contexts that are disabled in the</span>
+<span class="sd">    config are omitted here.</span>
+
+<span class="sd">    If the `openid` argument is None, then this is an expensive query that</span>
+<span class="sd">    loads, practically, the whole database.  However, if an openid string is</span>
+<span class="sd">    submitted, then only the preferences of that user are returned (and this is</span>
+<span class="sd">    less expensive).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cull_backends</span> <span class="o">=</span> <span class="n">cull_backends</span> <span class="ow">or</span> <span class="p">[]</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Preference</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">openid</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Preference</span><span class="o">.</span><span class="n">openid</span><span class="o">==</span><span class="n">openid</span><span class="p">)</span>
+
+    <span class="n">preferences</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">preference</span><span class="o">.</span><span class="n">__json__</span><span class="p">(</span><span class="n">reify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">preference</span> <span class="ow">in</span> <span class="n">preferences</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">preference</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;fmn.backends&#39;</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">preference</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cull_backends</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">cull_disabled</span> <span class="ow">or</span> <span class="n">preference</span><span class="o">.</span><span class="n">enabled</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="load_rules"><a class="viewcode-back" href="../../reference/fmn.lib.html#fmn.lib.load_rules">[docs]</a><span class="k">def</span> <span class="nf">load_rules</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s1">&#39;fmn.rules&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Load the big list of allowed callable rules. &quot;&quot;&quot;</span>
+
+    <span class="n">module</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">fromlist</span><span class="o">=</span><span class="p">[</span><span class="n">root</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]])</span>
+
+    <span class="n">hinting_helpers</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">hinting</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+    <span class="n">rules</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># Ignore non-callables.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Ignore our decorator and its friends</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">hinting_helpers</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">doc</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="c1"># It&#39;s crazy, but inspect (stdlib!) doesn&#39;t return unicode objs on py2.</span>
+        <span class="k">if</span> <span class="n">doc</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;decode&#39;</span><span class="p">):</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">doc</span><span class="p">:</span>
+            <span class="c1"># If we have a docstring, then mark it up beautifully for display</span>
+            <span class="c1"># in the web app.</span>
+            <span class="c1"># FWIW, this should probably be moved into fmn.web since nowhere</span>
+            <span class="c1"># else are we going to want HTML... we&#39;ll still want raw .rst.</span>
+            <span class="n">title</span><span class="p">,</span> <span class="n">doc_as_rst</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">docutils</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">html_parts</span><span class="p">(</span><span class="n">doc_as_rst</span><span class="p">)[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span>
+            <span class="n">soup</span> <span class="o">=</span> <span class="n">bs4</span><span class="o">.</span><span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;html5lib&#39;</span><span class="p">)</span>
+            <span class="n">doc_no_links</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">,</span> <span class="n">strip_anchor_tags</span><span class="p">(</span><span class="n">soup</span><span class="p">)))</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">markupsafe</span><span class="o">.</span><span class="n">Markup</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+            <span class="n">doc_no_links</span> <span class="o">=</span> <span class="n">markupsafe</span><span class="o">.</span><span class="n">Markup</span><span class="p">(</span><span class="n">doc_no_links</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;UNDOCUMENTED&quot;</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="s2">&quot;No docs for </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2"> </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+            <span class="n">doc_no_links</span> <span class="o">=</span> <span class="n">doc</span>
+
+        <span class="n">rules</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;func&#39;</span><span class="p">:</span> <span class="n">obj</span><span class="p">,</span>
+            <span class="s1">&#39;submodule&#39;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">__module__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+            <span class="s1">&#39;doc&#39;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+            <span class="s1">&#39;doc-no-links&#39;</span><span class="p">:</span> <span class="n">doc_no_links</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+            <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getargspec</span><span class="p">(</span><span class="n">obj</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;datanommer-hints&#39;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;hints&#39;</span><span class="p">,</span> <span class="p">{}),</span>
+            <span class="s1">&#39;hints-invertible&#39;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;hinting_invertible&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="s1">&#39;hints-callable&#39;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;hinting_callable&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="n">rules</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+        <span class="nb">sorted</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="n">root</span><span class="p">:</span> <span class="n">rules</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="strip_anchor_tags"><a class="viewcode-back" href="../../reference/fmn.lib.html#fmn.lib.strip_anchor_tags">[docs]</a><span class="k">def</span> <span class="nf">strip_anchor_tags</span><span class="p">(</span><span class="n">soup</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">contents</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">):</span>
+            <span class="n">tag</span><span class="o">.</span><span class="n">contents</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">strip_anchor_tags</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
+            <span class="k">yield</span> <span class="n">tag</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">tag</span><span class="o">.</span><span class="n">string</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">tag</span></div>
+
+
+<div class="viewcode-block" id="validate_detail_value"><a class="viewcode-back" href="../../reference/fmn.lib.html#fmn.lib.validate_detail_value">[docs]</a><span class="k">def</span> <span class="nf">validate_detail_value</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">ctx</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;irc&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">irc_regex</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;value must be a valid irc nick&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ctx</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;email&#39;</span><span class="p">:</span>
+        <span class="n">mailserver</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;fmn.email.mailserver&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_validate_email</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">mailserver</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ctx</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;android&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">gcm_regex</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;not a valid android registration id&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ctx</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;sse&#39;</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;No validation scheme for </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ctx</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="c1"># Happy.</span>
+    <span class="k">return</span></div>
+
+<span class="k">def</span> <span class="nf">_validate_email</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">mailserver</span><span class="p">):</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="n">mailserver</span><span class="p">)</span>
+    <span class="n">code</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">code</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">reason</span> <span class="o">=</span> <span class="n">reason</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">reason</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

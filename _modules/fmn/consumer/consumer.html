@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fmn.consumer.consumer &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fmn.consumer.consumer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># An example fedmsg koji consumer</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+
+<span class="kn">import</span> <span class="nn">fedmsg.consumers</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+
+<span class="kn">import</span> <span class="nn">fmn.lib</span>
+<span class="kn">import</span> <span class="nn">fmn.rules.utils</span>
+<span class="kn">from</span> <span class="nn">fmn.consumer.util</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">new_packager</span><span class="p">,</span>
+    <span class="n">new_badges_user</span><span class="p">,</span>
+    <span class="n">get_fas_email</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;fmn&quot;</span><span class="p">)</span>
+
+<span class="n">OPTS</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span>
+    <span class="n">heartbeat_interval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">retry_delay</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="notify_prefs_change"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.consumer.notify_prefs_change">[docs]</a><span class="k">def</span> <span class="nf">notify_prefs_change</span><span class="p">(</span><span class="n">openid</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">json</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">OPTS</span><span class="p">)</span>
+    <span class="n">msg_id</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">-</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="s1">&#39;refresh&#39;</span>
+    <span class="n">chan</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+    <span class="n">chan</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;fanout&#39;</span><span class="p">)</span>
+    <span class="n">chan</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span>
+        <span class="n">exchange</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span>
+        <span class="n">routing_key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s1">&#39;topic&#39;</span><span class="p">:</span> <span class="s1">&#39;consumer.fmn.prefs.update&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;topic&#39;</span><span class="p">:</span> <span class="s1">&#39;consumer.fmn.prefs.update&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;msg_id&quot;</span><span class="p">:</span> <span class="n">msg_id</span><span class="p">,</span>
+                <span class="s1">&#39;msg&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;openid&quot;</span><span class="p">:</span> <span class="n">openid</span><span class="p">,</span>
+                <span class="p">},</span>
+
+            <span class="p">},</span>
+        <span class="p">}),</span>
+        <span class="n">properties</span><span class="o">=</span><span class="n">pika</span><span class="o">.</span><span class="n">BasicProperties</span><span class="p">(</span>
+            <span class="n">delivery_mode</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">chan</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FMNConsumer"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.consumer.FMNConsumer">[docs]</a><span class="k">class</span> <span class="nc">FMNConsumer</span><span class="p">(</span><span class="n">fedmsg</span><span class="o">.</span><span class="n">consumers</span><span class="o">.</span><span class="n">FedmsgConsumer</span><span class="p">):</span>
+    <span class="n">topic</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span>
+    <span class="n">config_key</span> <span class="o">=</span> <span class="s1">&#39;fmn.consumer.enabled&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;FMNConsumer initializing&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FMNConsumer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fmn.sqlalchemy.uri&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autocreate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fmn.autocreate&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">junk_suffixes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fmn.junk_suffixes&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignored_copr_owners</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ignored_copr_owners&#39;</span><span class="p">,</span>
+                                                       <span class="p">[])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;fmn.sqlalchemy.uri must be present&#39;</span><span class="p">)</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Loading rules from fmn.rules&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_paths</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">load_rules</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s2">&quot;fmn.rules&quot;</span><span class="p">)</span>
+
+        <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_session</span><span class="p">()</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;FMNConsumer initialized&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FMNConsumer.make_session"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.consumer.FMNConsumer.make_session">[docs]</a>    <span class="k">def</span> <span class="nf">make_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FMNConsumer.consume"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.consumer.FMNConsumer.consume">[docs]</a>    <span class="k">def</span> <span class="nf">consume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_msg</span><span class="p">):</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_session</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">raw_msg</span><span class="p">)</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># transaction is committed here</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>  <span class="c1"># rolls back the transaction</span>
+            <span class="k">raise</span></div>
+
+<div class="viewcode-block" id="FMNConsumer.work"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.consumer.FMNConsumer.work">[docs]</a>    <span class="k">def</span> <span class="nf">work</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">raw_msg</span><span class="p">):</span>
+        <span class="n">topic</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">raw_msg</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">],</span> <span class="n">raw_msg</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">junk_suffixes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">topic</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Dropping </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">topic</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="c1"># Ignore high-usage COPRs</span>
+        <span class="k">if</span> <span class="n">topic</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;org.fedoraproject.prod.copr.&#39;</span><span class="p">)</span> <span class="ow">and</span> \
+                <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;owner&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignored_copr_owners</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Dropping COPR </span><span class="si">%r</span><span class="s1"> by </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;owner&#39;</span><span class="p">]))</span>
+            <span class="k">return</span>
+
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;FMNConsumer received </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;msg_id&#39;</span><span class="p">],</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">])</span>
+
+        <span class="c1"># First, do some cache management.  This can be confusing because there</span>
+        <span class="c1"># are two different caches, with two different mechanisms, storing two</span>
+        <span class="c1"># different kinds of data.  The first is a simple python dict that</span>
+        <span class="c1"># contains the &#39;preferences&#39; from the fmn database.  The second is a</span>
+        <span class="c1"># dogpile.cache (potentially stored in memcached, but configurable from</span>
+        <span class="c1"># /etc/fedmsg.d/).  The dogpile.cache cache stores pkgdb2</span>
+        <span class="c1"># package-ownership relations.  Both caches are held for a very long</span>
+        <span class="c1"># time and update themselves dynamically here.</span>
+
+        <span class="k">if</span> <span class="s1">&#39;.fmn.&#39;</span> <span class="ow">in</span> <span class="n">topic</span><span class="p">:</span>
+            <span class="n">openid</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="s1">&#39;openid&#39;</span><span class="p">]</span>
+            <span class="n">notify_prefs_change</span><span class="p">(</span><span class="n">openid</span><span class="p">)</span>
+
+        <span class="c1"># If a user has tweaked something in the pkgdb2 db, then invalidate our</span>
+        <span class="c1"># dogpile cache.. but only the parts that have something to do with any</span>
+        <span class="c1"># one of the users involved in the pkgdb2 interaction.  Note that a</span>
+        <span class="c1"># &#39;username&#39; here could be an actual username, or a group name like</span>
+        <span class="c1"># &#39;group::infra-sig&#39;.</span>
+        <span class="k">if</span> <span class="s1">&#39;.pkgdb.&#39;</span> <span class="ow">in</span> <span class="n">topic</span><span class="p">:</span>
+            <span class="n">usernames</span> <span class="o">=</span> <span class="n">fedmsg</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">msg2usernames</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">username</span> <span class="ow">in</span> <span class="n">usernames</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Invalidating pkgdb2 dogpile cache for </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">username</span><span class="p">)</span>
+                <span class="n">target</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_packages_of_user</span>
+                <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">invalidate_cache_for</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+
+        <span class="c1"># Create a local account with all the default rules if a user is</span>
+        <span class="c1"># identified by one of our &#39;selectors&#39;.  Here we can add all kinds of</span>
+        <span class="c1"># new triggers that should create new FMN accounts.  At this point in</span>
+        <span class="c1"># time we only create new accounts if 1) a new user is added to the</span>
+        <span class="c1"># packager group or 2) someone logs into badges.fp.o for the first</span>
+        <span class="c1"># time.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autocreate</span><span class="p">:</span>
+            <span class="n">selectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_packager</span><span class="p">,</span> <span class="n">new_badges_user</span><span class="p">]</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">fn</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span> <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">selectors</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">username</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Autocreating account for </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">username</span><span class="p">)</span>
+                <span class="n">openid</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.id.fedoraproject.org&#39;</span> <span class="o">%</span> <span class="n">username</span>
+                <span class="n">openid_url</span> <span class="o">=</span> <span class="s1">&#39;https://</span><span class="si">%s</span><span class="s1">.id.fedoraproject.org&#39;</span> <span class="o">%</span> <span class="n">username</span>
+                <span class="n">email</span> <span class="o">=</span> <span class="n">get_fas_email</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+                <span class="n">user</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">User</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+                    <span class="n">session</span><span class="p">,</span> <span class="n">openid</span><span class="o">=</span><span class="n">openid</span><span class="p">,</span> <span class="n">openid_url</span><span class="o">=</span><span class="n">openid_url</span><span class="p">,</span>
+                    <span class="n">create_defaults</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">detail_values</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="n">notify_prefs_change</span><span class="p">(</span><span class="n">openid</span><span class="p">)</span>
+
+        <span class="c1"># Do the same dogpile.cache invalidation trick that we did above, but</span>
+        <span class="c1"># here do it for fas group membership changes.  (This is important</span>
+        <span class="c1"># because someone could be in a group like the infra-sig which itself</span>
+        <span class="c1"># has package-ownership relations in pkgdb.  If membership in that</span>
+        <span class="c1"># group changes we need to sync fas relationships to catch up and route</span>
+        <span class="c1"># messages to the new group members).</span>
+        <span class="k">if</span> <span class="s1">&#39;.fas.group.&#39;</span> <span class="ow">in</span> <span class="n">topic</span><span class="p">:</span>
+            <span class="n">usernames</span> <span class="o">=</span> <span class="n">fedmsg</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">msg2usernames</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">username</span> <span class="ow">in</span> <span class="n">usernames</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Invalidating fas cache for </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">username</span><span class="p">)</span>
+                <span class="n">target</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_groups_of_user</span>
+                <span class="n">fmn</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">invalidate_cache_for</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">hub</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+
+        <span class="c1"># With cache management done, we can move on to the real work.</span>
+        <span class="c1"># Compute, based on our in-memory cache of preferences, who we think</span>
+        <span class="c1"># should receive this message.</span>
+
+        <span class="kn">import</span> <span class="nn">json</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">OPTS</span><span class="p">)</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;workers&#39;</span><span class="p">)</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="s1">&#39;workers&#39;</span><span class="p">,</span> <span class="n">durable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span>
+            <span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">routing_key</span><span class="o">=</span><span class="s1">&#39;workers&#39;</span><span class="p">,</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">raw_msg</span><span class="p">),</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">pika</span><span class="o">.</span><span class="n">BasicProperties</span><span class="p">(</span>
+                <span class="n">delivery_mode</span><span class="o">=</span><span class="mi">2</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done.  </span><span class="si">%0.2f</span><span class="s2">s </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                  <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">,</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;msg_id&#39;</span><span class="p">],</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="FMNConsumer.stop"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.consumer.FMNConsumer.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Cleaning up FMNConsumer.&quot;</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">FMNConsumer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

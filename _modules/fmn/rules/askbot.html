@@ -46,7 +46,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;askbot&#39;</span><span class="p">])</span>
-<div class="viewcode-block" id="askbot_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.askbot.askbot_catchall">[docs]</a><span class="k">def</span> <span class="nf">askbot_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="askbot_catchall"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.askbot.askbot_catchall">[docs]</a><span class="k">def</span> <span class="nf">askbot_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; All askbot events</span>
 
 <span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
@@ -57,7 +57,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;askbot.post.delete&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="askbot_post_deleted"><a class="viewcode-back" href="../../../rules.html#fmn.rules.askbot.askbot_post_deleted">[docs]</a><span class="k">def</span> <span class="nf">askbot_post_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="askbot_post_deleted"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.askbot.askbot_post_deleted">[docs]</a><span class="k">def</span> <span class="nf">askbot_post_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Deleted Ask Fedora posts</span>
 
 <span class="sd">    This rule will let through messages that get sent when either</span>
@@ -68,7 +68,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;askbot.post.edit&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="askbot_post_edited"><a class="viewcode-back" href="../../../rules.html#fmn.rules.askbot.askbot_post_edited">[docs]</a><span class="k">def</span> <span class="nf">askbot_post_edited</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="askbot_post_edited"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.askbot.askbot_post_edited">[docs]</a><span class="k">def</span> <span class="nf">askbot_post_edited</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Updates to Ask Fedora posts</span>
 
 <span class="sd">    This rule will let through messages that get sent when either</span>
@@ -79,7 +79,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;askbot.post.flag_offensive.add&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="askbot_post_flagged_offensive"><a class="viewcode-back" href="../../../rules.html#fmn.rules.askbot.askbot_post_flagged_offensive">[docs]</a><span class="k">def</span> <span class="nf">askbot_post_flagged_offensive</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="askbot_post_flagged_offensive"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.askbot.askbot_post_flagged_offensive">[docs]</a><span class="k">def</span> <span class="nf">askbot_post_flagged_offensive</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When Ask Fedora posts are flagged as &#39;offensive&#39;</span>
 
 <span class="sd">    Sometimes, people are rude.  This rule will let you get notified whenever</span>
@@ -90,7 +90,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;askbot.post.flag_offensive.delete&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="askbot_post_unflagged_offensive"><a class="viewcode-back" href="../../../rules.html#fmn.rules.askbot.askbot_post_unflagged_offensive">[docs]</a><span class="k">def</span> <span class="nf">askbot_post_unflagged_offensive</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="askbot_post_unflagged_offensive"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.askbot.askbot_post_unflagged_offensive">[docs]</a><span class="k">def</span> <span class="nf">askbot_post_unflagged_offensive</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When Ask Fedora posts are unflagged as &#39;offensive&#39;</span>
 
 <span class="sd">    Sometimes, people are rude.  This rule will let you get notified whenever</span>
@@ -101,7 +101,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;askbot.tag.update&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="askbot_tag_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.askbot.askbot_tag_update">[docs]</a><span class="k">def</span> <span class="nf">askbot_tag_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="askbot_tag_update"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.askbot.askbot_tag_update">[docs]</a><span class="k">def</span> <span class="nf">askbot_tag_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Tags altered on Ask Fedora posts</span>
 
 <span class="sd">    This rule lets through messages indicating that **tags** on an</span>

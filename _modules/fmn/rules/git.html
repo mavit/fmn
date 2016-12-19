@@ -46,7 +46,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;git&#39;</span><span class="p">])</span>
-<div class="viewcode-block" id="git_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.git.git_catchall">[docs]</a><span class="k">def</span> <span class="nf">git_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="git_catchall"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.git.git_catchall">[docs]</a><span class="k">def</span> <span class="nf">git_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; All dist-git activity</span>
 
 <span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
@@ -56,7 +56,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;git.branch&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="git_branch"><a class="viewcode-back" href="../../../rules.html#fmn.rules.git.git_branch">[docs]</a><span class="k">def</span> <span class="nf">git_branch</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="git_branch"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.git.git_branch">[docs]</a><span class="k">def</span> <span class="nf">git_branch</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New dist-git branches for packages</span>
 
 <span class="sd">    Include this rule to receive notifications of new branches being created</span>
@@ -66,7 +66,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;git.lookaside.new&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="git_lookaside_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.git.git_lookaside_new">[docs]</a><span class="k">def</span> <span class="nf">git_lookaside_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="git_lookaside_new"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.git.git_lookaside_new">[docs]</a><span class="k">def</span> <span class="nf">git_lookaside_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New tarballs uploaded to the lookaside cache</span>
 
 <span class="sd">    Include this rule to receive notifications of new sources being uploaded</span>
@@ -77,7 +77,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;git.mass_branch.complete&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="git_mass_branch_complete"><a class="viewcode-back" href="../../../rules.html#fmn.rules.git.git_mass_branch_complete">[docs]</a><span class="k">def</span> <span class="nf">git_mass_branch_complete</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="git_mass_branch_complete"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.git.git_mass_branch_complete">[docs]</a><span class="k">def</span> <span class="nf">git_mass_branch_complete</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Mass-branch completes</span>
 
 <span class="sd">    There is a script called ``pkgdb2branch`` that gets run by an SCM</span>
@@ -90,7 +90,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;git.mass_branch.start&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="git_mass_branch_start"><a class="viewcode-back" href="../../../rules.html#fmn.rules.git.git_mass_branch_start">[docs]</a><span class="k">def</span> <span class="nf">git_mass_branch_start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="git_mass_branch_start"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.git.git_mass_branch_start">[docs]</a><span class="k">def</span> <span class="nf">git_mass_branch_start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Mass-branch begins</span>
 
 <span class="sd">    There is a script called ``pkgdb2branch`` that gets run by an SCM</span>
@@ -103,7 +103,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;git.pkgdb2branch.complete&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="git_pkgdb2branch_complete"><a class="viewcode-back" href="../../../rules.html#fmn.rules.git.git_pkgdb2branch_complete">[docs]</a><span class="k">def</span> <span class="nf">git_pkgdb2branch_complete</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="git_pkgdb2branch_complete"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.git.git_pkgdb2branch_complete">[docs]</a><span class="k">def</span> <span class="nf">git_pkgdb2branch_complete</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; pkgdb2branch completes</span>
 
 <span class="sd">    There is a script called ``pkgdb2branch`` that gets run by an SCM</span>
@@ -120,7 +120,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;git.pkgdb2branch.start&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="git_pkgdb2branch_start"><a class="viewcode-back" href="../../../rules.html#fmn.rules.git.git_pkgdb2branch_start">[docs]</a><span class="k">def</span> <span class="nf">git_pkgdb2branch_start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="git_pkgdb2branch_start"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.git.git_pkgdb2branch_start">[docs]</a><span class="k">def</span> <span class="nf">git_pkgdb2branch_start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; pkgdb2branch starts</span>
 
 <span class="sd">    There is a script called ``pkgdb2branch`` that gets run by an SCM</span>
@@ -136,7 +136,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;git.receive&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="git_receive"><a class="viewcode-back" href="../../../rules.html#fmn.rules.git.git_receive">[docs]</a><span class="k">def</span> <span class="nf">git_receive</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="git_receive"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.git.git_receive">[docs]</a><span class="k">def</span> <span class="nf">git_receive</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Git pushes to dist-git</span>
 
 <span class="sd">    Including this rule will produce notifications triggered when somebody runs</span>

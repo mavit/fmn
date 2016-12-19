@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FMN Consumer &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fmn.consumer">
+<span id="fmn-consumer"></span><h1>FMN Consumer<a class="headerlink" href="#module-fmn.consumer" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#subpackages" id="id1">Subpackages</a></li>
+<li><a class="reference internal" href="#fmn-consumer-backend" id="id2">FMN Consumer Backend</a></li>
+<li><a class="reference internal" href="#module-fmn.consumer.consumer" id="id3">FMN Consumer Consumer</a></li>
+<li><a class="reference internal" href="#fmn-consumer-digests" id="id4">FMN Consumer Digests</a></li>
+<li><a class="reference internal" href="#fmn-consumer-fas-shim" id="id5">FMN Consumer FAS Shim</a></li>
+<li><a class="reference internal" href="#module-fmn.consumer.producer" id="id6">FMN Consumer Producer</a></li>
+<li><a class="reference internal" href="#module-fmn.consumer.util" id="id7">FMN Consumer Utilities</a></li>
+<li><a class="reference internal" href="#fmn-consumer-worker" id="id8">FMN Consumer Worker</a></li>
+</ul>
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="fmn-consumer-backend">
+<h2>FMN Consumer Backend<a class="headerlink" href="#fmn-consumer-backend" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fmn.consumer.consumer">
+<span id="fmn-consumer-consumer"></span><h2>FMN Consumer Consumer<a class="headerlink" href="#module-fmn.consumer.consumer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fmn.consumer.consumer.FMNConsumer">
+<em class="property">class </em><code class="descclassname">fmn.consumer.consumer.</code><code class="descname">FMNConsumer</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/consumer.html#FMNConsumer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.consumer.FMNConsumer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">fedmsg.consumers.FedmsgConsumer</span></code></p>
+<dl class="attribute">
+<dt id="fmn.consumer.consumer.FMNConsumer.config_key">
+<code class="descname">config_key</code><em class="property"> = 'fmn.consumer.enabled'</em><a class="headerlink" href="#fmn.consumer.consumer.FMNConsumer.config_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fmn.consumer.consumer.FMNConsumer.consume">
+<code class="descname">consume</code><span class="sig-paren">(</span><em>raw_msg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/consumer.html#FMNConsumer.consume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.consumer.FMNConsumer.consume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fmn.consumer.consumer.FMNConsumer.make_session">
+<code class="descname">make_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/consumer.html#FMNConsumer.make_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.consumer.FMNConsumer.make_session" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fmn.consumer.consumer.FMNConsumer.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/consumer.html#FMNConsumer.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.consumer.FMNConsumer.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fmn.consumer.consumer.FMNConsumer.topic">
+<code class="descname">topic</code><em class="property"> = '*'</em><a class="headerlink" href="#fmn.consumer.consumer.FMNConsumer.topic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fmn.consumer.consumer.FMNConsumer.work">
+<code class="descname">work</code><span class="sig-paren">(</span><em>session</em>, <em>raw_msg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/consumer.html#FMNConsumer.work"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.consumer.FMNConsumer.work" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fmn.consumer.consumer.notify_prefs_change">
+<code class="descclassname">fmn.consumer.consumer.</code><code class="descname">notify_prefs_change</code><span class="sig-paren">(</span><em>openid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/consumer.html#notify_prefs_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.consumer.notify_prefs_change" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="fmn-consumer-digests">
+<h2>FMN Consumer Digests<a class="headerlink" href="#fmn-consumer-digests" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="fmn-consumer-fas-shim">
+<h2>FMN Consumer FAS Shim<a class="headerlink" href="#fmn-consumer-fas-shim" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fmn.consumer.producer">
+<span id="fmn-consumer-producer"></span><h2>FMN Consumer Producer<a class="headerlink" href="#module-fmn.consumer.producer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fmn.consumer.producer.ConfirmationProducer">
+<em class="property">class </em><code class="descclassname">fmn.consumer.producer.</code><code class="descname">ConfirmationProducer</code><span class="sig-paren">(</span><em>session</em>, <em>backends</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/producer.html#ConfirmationProducer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.producer.ConfirmationProducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmn.consumer.producer.FMNProducerBase" title="fmn.consumer.producer.FMNProducerBase"><code class="xref py py-class docutils literal"><span class="pre">fmn.consumer.producer.FMNProducerBase</span></code></a></p>
+<p>Handle managing the pending confirmations.</p>
+<dl class="method">
+<dt id="fmn.consumer.producer.ConfirmationProducer.work">
+<code class="descname">work</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/producer.html#ConfirmationProducer.work"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.producer.ConfirmationProducer.work" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fmn.consumer.producer.DigestProducer">
+<em class="property">class </em><code class="descclassname">fmn.consumer.producer.</code><code class="descname">DigestProducer</code><span class="sig-paren">(</span><em>session</em>, <em>backends</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/producer.html#DigestProducer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.producer.DigestProducer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmn.consumer.producer.FMNProducerBase" title="fmn.consumer.producer.FMNProducerBase"><code class="xref py py-class docutils literal"><span class="pre">fmn.consumer.producer.FMNProducerBase</span></code></a></p>
+<p>Handle sending out digests of messages for various contexts.</p>
+<dl class="staticmethod">
+<dt id="fmn.consumer.producer.DigestProducer.manage_batch">
+<em class="property">static </em><code class="descname">manage_batch</code><span class="sig-paren">(</span><em>session</em>, <em>backend</em>, <em>pref</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/producer.html#DigestProducer.manage_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.producer.DigestProducer.manage_batch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fmn.consumer.producer.DigestProducer.work">
+<code class="descname">work</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/producer.html#DigestProducer.work"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.producer.DigestProducer.work" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fmn.consumer.producer.FMNProducerBase">
+<em class="property">class </em><code class="descclassname">fmn.consumer.producer.</code><code class="descname">FMNProducerBase</code><span class="sig-paren">(</span><em>session</em>, <em>backends</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/producer.html#FMNProducerBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.producer.FMNProducerBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>An abstract base class for our other producers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmn.consumer.producer.total_seconds">
+<code class="descclassname">fmn.consumer.producer.</code><code class="descname">total_seconds</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/producer.html#total_seconds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.producer.total_seconds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a datetime.timedelta object and return the total seconds.</p>
+<p>dt.total_seconds() exists in the python 2.7 stdlib, but not in python 2.6.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-fmn.consumer.util">
+<span id="fmn-consumer-utilities"></span><h2>FMN Consumer Utilities<a class="headerlink" href="#module-fmn.consumer.util" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fmn.consumer.util.get_fas_email">
+<code class="descclassname">fmn.consumer.util.</code><code class="descname">get_fas_email</code><span class="sig-paren">(</span><em>config</em>, <em>username</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/util.html#get_fas_email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.util.get_fas_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return FAS email associated with a username.</p>
+<p>We use this to try and get the right email for new autocreated users.
+We used to just use <a class="reference external" href="mailto:$USERNAME&#37;&#52;&#48;fp&#46;o">$USERNAME<span>&#64;</span>fp<span>&#46;</span>o</a>, but when first created most users don&#8217;t
+have that alias available yet.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmn.consumer.util.new_badges_user">
+<code class="descclassname">fmn.consumer.util.</code><code class="descname">new_badges_user</code><span class="sig-paren">(</span><em>topic</em>, <em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/util.html#new_badges_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.util.new_badges_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a username if the message is about a new fedbadges user.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmn.consumer.util.new_packager">
+<code class="descclassname">fmn.consumer.util.</code><code class="descname">new_packager</code><span class="sig-paren">(</span><em>topic</em>, <em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmn/consumer/util.html#new_packager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmn.consumer.util.new_packager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a username if the message is about a new packager in FAS.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="fmn-consumer-worker">
+<h2>FMN Consumer Worker<a class="headerlink" href="#fmn-consumer-worker" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FMN Consumer</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#fmn-consumer-backend">FMN Consumer Backend</a></li>
+<li><a class="reference internal" href="#module-fmn.consumer.consumer">FMN Consumer Consumer</a></li>
+<li><a class="reference internal" href="#fmn-consumer-digests">FMN Consumer Digests</a></li>
+<li><a class="reference internal" href="#fmn-consumer-fas-shim">FMN Consumer FAS Shim</a></li>
+<li><a class="reference internal" href="#module-fmn.consumer.producer">FMN Consumer Producer</a></li>
+<li><a class="reference internal" href="#module-fmn.consumer.util">FMN Consumer Utilities</a></li>
+<li><a class="reference internal" href="#fmn-consumer-worker">FMN Consumer Worker</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/fmn.consumer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="../_sources/reference/fmn.consumer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

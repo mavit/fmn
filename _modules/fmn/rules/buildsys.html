@@ -46,7 +46,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;buildsys&#39;</span><span class="p">])</span>
-<div class="viewcode-block" id="koji_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_catchall">[docs]</a><span class="k">def</span> <span class="nf">koji_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_catchall"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_catchall">[docs]</a><span class="k">def</span> <span class="nf">koji_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; All Koji events</span>
 
 <span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
@@ -58,7 +58,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;buildsys&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_instance"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_instance">[docs]</a><span class="k">def</span> <span class="nf">koji_instance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_instance"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_instance">[docs]</a><span class="k">def</span> <span class="nf">koji_instance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Particular koji instances</span>
 
 <span class="sd">    You may not have even known it, but we have multiple instances of the koji</span>
@@ -87,7 +87,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="koji_scratch_build_state_change"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_state_change">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_scratch_build_state_change"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_scratch_build_state_change">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Scratch builds changing state (any state)</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -98,7 +98,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_scratch_build_started"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_started">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_started</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_scratch_build_started"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_scratch_build_started">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_started</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Scratch builds starting</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -112,7 +112,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_scratch_build_completed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_completed">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_completed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_scratch_build_completed"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_scratch_build_completed">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_completed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Scratch builds completing</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -126,7 +126,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_scratch_build_failed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_failed">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_failed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_scratch_build_failed"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_scratch_build_failed">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_failed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Scratch builds failing</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -140,7 +140,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.task.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_scratch_build_cancelled"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_scratch_build_cancelled">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_cancelled</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_scratch_build_cancelled"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_scratch_build_cancelled">[docs]</a><span class="k">def</span> <span class="nf">koji_scratch_build_cancelled</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Scratch builds being cancelled</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -154,7 +154,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="koji_build_state_change"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_state_change">[docs]</a><span class="k">def</span> <span class="nf">koji_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_build_state_change"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_build_state_change">[docs]</a><span class="k">def</span> <span class="nf">koji_build_state_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Builds changing state (any state)</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -166,7 +166,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_build_started"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_started">[docs]</a><span class="k">def</span> <span class="nf">koji_build_started</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_build_started"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_build_started">[docs]</a><span class="k">def</span> <span class="nf">koji_build_started</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Builds starting</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -180,7 +180,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_build_completed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_completed">[docs]</a><span class="k">def</span> <span class="nf">koji_build_completed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_build_completed"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_build_completed">[docs]</a><span class="k">def</span> <span class="nf">koji_build_completed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Builds completing</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -194,7 +194,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_build_deleted"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_deleted">[docs]</a><span class="k">def</span> <span class="nf">koji_build_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_build_deleted"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_build_deleted">[docs]</a><span class="k">def</span> <span class="nf">koji_build_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Builds being deleted</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -208,7 +208,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_build_failed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_failed">[docs]</a><span class="k">def</span> <span class="nf">koji_build_failed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_build_failed"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_build_failed">[docs]</a><span class="k">def</span> <span class="nf">koji_build_failed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Builds failing</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -222,7 +222,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.build.state.change&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="koji_build_cancelled"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_build_cancelled">[docs]</a><span class="k">def</span> <span class="nf">koji_build_cancelled</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_build_cancelled"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_build_cancelled">[docs]</a><span class="k">def</span> <span class="nf">koji_build_cancelled</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Builds being cancelled</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -236,7 +236,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.package.list.change&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="koji_package_list_change"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_package_list_change">[docs]</a><span class="k">def</span> <span class="nf">koji_package_list_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_package_list_change"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_package_list_change">[docs]</a><span class="k">def</span> <span class="nf">koji_package_list_change</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Koji &quot;package list&quot; changes</span>
 
 <span class="sd">    This rule lets through messages from the `koji build</span>
@@ -247,7 +247,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.repo.done&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="koji_repo_done"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_repo_done">[docs]</a><span class="k">def</span> <span class="nf">koji_repo_done</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_repo_done"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_repo_done">[docs]</a><span class="k">def</span> <span class="nf">koji_repo_done</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Koji repo regeneration (complete)</span>
 
 <span class="sd">    This rule lets through messages indicating that the `koji build</span>
@@ -258,7 +258,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.repo.init&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="koji_repo_init"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_repo_init">[docs]</a><span class="k">def</span> <span class="nf">koji_repo_init</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_repo_init"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_repo_init">[docs]</a><span class="k">def</span> <span class="nf">koji_repo_init</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Koji repo regeneration (start)</span>
 
 <span class="sd">    This rule lets through messages indicating that the `koji build</span>
@@ -269,7 +269,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.tag&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="koji_tag"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_tag">[docs]</a><span class="k">def</span> <span class="nf">koji_tag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_tag"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_tag">[docs]</a><span class="k">def</span> <span class="nf">koji_tag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Packages are added to a Koji tag</span>
 
 <span class="sd">    This rule lets through messages that get published when the `koji build</span>
@@ -280,7 +280,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.untag&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="koji_untag"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_untag">[docs]</a><span class="k">def</span> <span class="nf">koji_untag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_untag"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_untag">[docs]</a><span class="k">def</span> <span class="nf">koji_untag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Packages are removed from a Koji tag</span>
 
 <span class="sd">    This rule lets through messages that get published when the `koji build</span>
@@ -291,7 +291,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;buildsys.rpm.sign&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="koji_rpm_sign"><a class="viewcode-back" href="../../../rules.html#fmn.rules.buildsys.koji_rpm_sign">[docs]</a><span class="k">def</span> <span class="nf">koji_rpm_sign</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="koji_rpm_sign"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.buildsys.koji_rpm_sign">[docs]</a><span class="k">def</span> <span class="nf">koji_rpm_sign</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Packages are gpg signed in koji.</span>
 
 <span class="sd">    This rule lets through messages that get published when the `koji build</span>

@@ -48,7 +48,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pagure&#39;</span><span class="p">])</span>
-<div class="viewcode-block" id="pagure_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_catchall">[docs]</a><span class="k">def</span> <span class="nf">pagure_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_catchall"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_catchall">[docs]</a><span class="k">def</span> <span class="nf">pagure_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; All pagure.io activity</span>
 
 <span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
@@ -59,7 +59,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pagure&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="pagure_specific_project_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_specific_project_filter">[docs]</a><span class="k">def</span> <span class="nf">pagure_specific_project_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_specific_project_filter"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_specific_project_filter">[docs]</a><span class="k">def</span> <span class="nf">pagure_specific_project_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Particular pagure projects</span>
 
 <span class="sd">     Adding this rule allows you to get notifications for one or more</span>
@@ -86,7 +86,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pagure&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="pagure_specific_project_tag_filter"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_specific_project_tag_filter">[docs]</a><span class="k">def</span> <span class="nf">pagure_specific_project_tag_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_specific_project_tag_filter"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_specific_project_tag_filter">[docs]</a><span class="k">def</span> <span class="nf">pagure_specific_project_tag_filter</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Particular pagure project tags</span>
 
 <span class="sd">     Adding this rule allows you to get notifications for one or more</span>
@@ -113,7 +113,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.new&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_project_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_project_new"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_project_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New pagure projects</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -123,7 +123,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.new&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_new"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New pagure issues</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -133,7 +133,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.comment.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_comment_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_comment_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_comment_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_comment_added"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_comment_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_comment_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Comments on pagure issues</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -144,7 +144,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.tag.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_tag_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_tag_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_tag_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_tag_added"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_tag_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_tag_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Tags added to pagure issues</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -154,7 +154,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.tag.removed&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_tag_removed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_tag_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_tag_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_tag_removed"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_tag_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_tag_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Tags removed from pagure issues</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -165,7 +165,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.assigned.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_assigned_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_assigned_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_assigned_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_assigned_added"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_assigned_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_assigned_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Someone is assigned to a pagure issue</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -176,7 +176,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.assigned.reset&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_assigned_reset"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_assigned_reset">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_assigned_reset</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_assigned_reset"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_assigned_reset">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_assigned_reset</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; The assignment on a pagure issue is reset</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -187,7 +187,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.dependency.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_dependency_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_dependency_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_dependency_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_dependency_added"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_dependency_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_dependency_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A dep was added to a pagure issue</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -198,7 +198,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.dependency.removed&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_dependency_removed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_dependency_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_dependency_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_dependency_removed"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_dependency_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_dependency_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A dep was removed from a pagure issue</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -209,7 +209,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.issue.edit&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_issue_edit"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_issue_edit">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_edit</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_issue_edit"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_issue_edit">[docs]</a><span class="k">def</span> <span class="nf">pagure_issue_edit</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Issues being edited</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -219,7 +219,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.edit&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_project_edit"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_edit">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_edit</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_project_edit"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_project_edit">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_edit</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Projects being edited</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -229,7 +229,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.user.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_project_user_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_user_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_user_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_project_user_added"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_project_user_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_user_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New users added to a project</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -240,7 +240,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.tag.removed&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_project_tag_removed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_tag_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_tag_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_project_tag_removed"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_project_tag_removed">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_tag_removed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Tags removed from a project</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -252,7 +252,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.tag.edited&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_project_tag_edited"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_tag_edited">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_tag_edited</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_project_tag_edited"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_project_tag_edited">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_tag_edited</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Tags edited on a project</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -262,7 +262,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.project.forked&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_project_forked"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_project_forked">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_forked</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_project_forked"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_project_forked">[docs]</a><span class="k">def</span> <span class="nf">pagure_project_forked</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A project is forked</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -272,7 +272,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.comment.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_pull_request_comment_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_comment_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_comment_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_pull_request_comment_added"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_pull_request_comment_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_comment_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Comments on pull requests</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -283,7 +283,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.closed&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_pull_request_closed"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_closed">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_closed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_pull_request_closed"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_pull_request_closed">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_closed</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A pull request is closed</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -293,7 +293,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.new&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_pull_request_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_pull_request_new"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_pull_request_new">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A pull request is created</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -303,7 +303,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.flag.added&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_pull_request_flag_added"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_flag_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_flag_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_pull_request_flag_added"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_pull_request_flag_added">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_flag_added</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A flag is added to a pull request</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>
@@ -314,7 +314,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;pagure.pull-request.flag.updated&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;io.pagure&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="pagure_pull_request_flag_updated"><a class="viewcode-back" href="../../../rules.html#fmn.rules.pagure.pagure_pull_request_flag_updated">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_flag_updated</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="pagure_pull_request_flag_updated"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.pagure.pagure_pull_request_flag_updated">[docs]</a><span class="k">def</span> <span class="nf">pagure_pull_request_flag_updated</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A flag is updated on a pull request</span>
 
 <span class="sd">    Adding this rule to your filters will let through messages</span>

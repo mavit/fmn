@@ -44,7 +44,14 @@
             
   <div class="section" id="fedmsg-notifications">
 <h1>FedMSG Notifications<a class="headerlink" href="#fedmsg-notifications" title="Permalink to this headline">¶</a></h1>
-<p>Table of Contents:</p>
+<p>FedMSG Notifications is a family of systems built to manage end-user
+notifications triggered by <a class="reference external" href="http://fedmsg.com">fedmsg</a>, the FEDerated
+MeSsaGe bus.</p>
+<p>It offers a diverse set of notification media including (but not limited to)
+email, Internet Relay Chat (IRC), and Server-Sent Events (SSE). Users can
+configure their notification preferences for all these media in a single place.</p>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">FedMSG Notifications Development Guide</a><ul>
@@ -57,47 +64,6 @@
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#database">Database</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="rules.html">Rules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.anitya">Anitya Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.ansible">Ansible Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.askbot">Askbot Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.autocloud">Autocloud Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.bodhi">Bodhi Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.bugzilla">Bugzilla Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.buildsys">Build System Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.compose">Compose Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.coprs">COPR Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.faf">FAF Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.fas">Fedora Account System Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.fedbadges">Fedora Badges Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.fedbadges">Fedora Images Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.fedocal">Fedora Calendar Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.fedora_elections">Fedora Elections Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.fedoratagger">Fedora Tagger Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.fmn_notifications">FMN Notification Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.generic">Generic Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.git">Git Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.github">GitHub Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.hotness">The New Hotness Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.infragit">Fedora Infrastructure Git Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.jenkins">Jenkins Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.kerneltest">Kernel Test Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.koschei">Koschei Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.logger">Logger Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.mailman">Mailman Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.mdapi">MDAPI Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.meetbot">Meetbot Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.nagios">Nagios Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.nuancier">Nuancier Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.pagure">Pagure Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.pkgdb">pkgdb Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.planet">Planet Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.summershum">Summershum Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.taskotron">Taskotron Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.trac">Trac Rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rules.html#module-fmn.rules.wiki">Wiki Rules</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="glossary.html#rule">Rule</a></li>
 <li class="toctree-l2"><a class="reference internal" href="glossary.html#filter">Filter</a></li>
@@ -105,17 +71,13 @@
 </li>
 </ul>
 </div>
-<p>FedMSG Notifications is a family of systems built to manage end-user
-notifications triggered by <a class="reference external" href="http://fedmsg.com">fedmsg</a>, the FEDerated
-MeSsaGe bus.</p>
-<p>It offers a diverse set of notification media including (but not limited to)
-email, Internet Relay Chat (IRC), and Server-Sent Events (SSE). Users can
-configure their notification preferences for all these media in a single place.</p>
+</div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>In a nutshell, here&#8217;s the way this application works:</p>
 <ul class="simple">
-<li>You login and set up some preferences here, in this webapp.</li>
+<li>You login and set up some preferences in the
+<a class="reference external" href="https://github.com/fedora-infra/fmn.web/">fmn.web</a> webapp.</li>
 <li>Events occur in Fedora Infrastructure and are broadcast over fedmsg.</li>
 <li>This application receives those events and compares them against your
 preferences. If there&#8217;s a match, then it forwards you a notification.</li>
@@ -131,6 +93,18 @@ on the backend with fedmsg. Take a look at the <a class="reference external" hre
 <a class="reference external" href="https://github.com/fedora-infra/fmn/">source</a> on github.
 The development team hangs out in <code class="docutils literal"><span class="pre">#fedora-apps</span></code>. Please do stop by and say
 hello.</p>
+</div>
+<div class="section" id="package-reference">
+<h1>Package Reference<a class="headerlink" href="#package-reference" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/fmn.lib.html">FMN Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/fmn.rules.html">FMN Rules</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
@@ -150,10 +124,12 @@ hello.</p>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">FedMSG Notifications</a><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
 <li><a class="reference internal" href="#usage">Usage</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#get-involved">Get Involved</a></li>
+<li><a class="reference internal" href="#package-reference">Package Reference</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 <div class="relations">

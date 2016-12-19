@@ -49,7 +49,7 @@
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.version.update&#39;</span><span class="p">,</span>
                 <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="anitya_unmapped_new_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_unmapped_new_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_unmapped_new_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_unmapped_new_update"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_unmapped_new_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_unmapped_new_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New releases of upstream projects that have no mapping to Fedora</span>
 
 <span class="sd">    Adding this rule will let through events when new upstream releases are</span>
@@ -70,7 +70,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;anitya&#39;</span><span class="p">])</span>
-<div class="viewcode-block" id="anitya_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_catchall">[docs]</a><span class="k">def</span> <span class="nf">anitya_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_catchall"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_catchall">[docs]</a><span class="k">def</span> <span class="nf">anitya_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; All release-monitoring.org events</span>
 
 <span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
@@ -82,7 +82,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;anitya&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="anitya_specific_distro"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_specific_distro">[docs]</a><span class="k">def</span> <span class="nf">anitya_specific_distro</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">distro</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_specific_distro"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_specific_distro">[docs]</a><span class="k">def</span> <span class="nf">anitya_specific_distro</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">distro</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Distro-specific release-monitoring.org events</span>
 
 <span class="sd">    This rule will match all anitya events *only for a particular distro*.</span>
@@ -115,7 +115,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.distro.add&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_distro_add"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_distro_add">[docs]</a><span class="k">def</span> <span class="nf">anitya_distro_add</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_distro_add"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_distro_add">[docs]</a><span class="k">def</span> <span class="nf">anitya_distro_add</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New distributions added to release-monitoring.org</span>
 
 <span class="sd">    Adding this rule will trigger notifications when a new distribution is</span>
@@ -125,7 +125,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.distro.edit&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_distro_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_distro_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_distro_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_distro_update"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_distro_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_distro_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Anitya distributions updated</span>
 
 <span class="sd">    Adding this rule will trigger notifications when a distribution is</span>
@@ -135,7 +135,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.add&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_project_add"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_project_add">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_add</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_project_add"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_project_add">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_add</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New projects added to release-monitoring.org</span>
 
 <span class="sd">    Adding this rule will trigger notifications when a project is **added**</span>
@@ -145,7 +145,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.add.tried&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_project_add_tried"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_project_add_tried">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_add_tried</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_project_add_tried"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_project_add_tried">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_add_tried</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Attempts to add new projects to release-monitoring.org</span>
 
 <span class="sd">    Adding this rule will trigger notifications when a project is tried to</span>
@@ -155,7 +155,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.edit&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_project_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_project_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_project_update"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_project_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Updates to projects on release-monitoring.org</span>
 
 <span class="sd">    Adding this rule will trigger notifications when a project is **updated**</span>
@@ -165,7 +165,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.new&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_mapping_new"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_mapping_new">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_mapping_new"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_mapping_new">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_new</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When upstream projects are mapped to downstream packages</span>
 
 <span class="sd">    Adding this rule will trigger notifications when a new mapping of a</span>
@@ -176,7 +176,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.update&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_mapping_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_mapping_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_mapping_update"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_mapping_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Updates to anitya&#39;s upstream/downstream mappings</span>
 
 <span class="sd">    Adding this rule will trigger notifications when the mapping of a</span>
@@ -187,7 +187,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.map.remove&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_mapping_deleted"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_mapping_deleted">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_mapping_deleted"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_mapping_deleted">[docs]</a><span class="k">def</span> <span class="nf">anitya_mapping_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When upstream/downstream mappings are deleted</span>
 
 <span class="sd">    Adding this rule will trigger notifications when the mapping of a</span>
@@ -198,7 +198,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.remove&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_project_deleted"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_project_deleted">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_project_deleted"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_project_deleted">[docs]</a><span class="k">def</span> <span class="nf">anitya_project_deleted</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When upstream projects are deleted from anitya</span>
 
 <span class="sd">    Adding this rule will trigger notifications when a project is **deleted**</span>
@@ -209,7 +209,7 @@
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.version.update&#39;</span><span class="p">,</span>
                 <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_new_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_new_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_new_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_new_update"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_new_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_new_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When new upstream releases are detected</span>
 
 <span class="sd">    Adding this rule will trigger notifications when a project has a</span>
@@ -219,7 +219,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;anitya.project.update&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;org.release-monitoring&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="anitya_info_update"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_info_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_info_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_info_update"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_info_update">[docs]</a><span class="k">def</span> <span class="nf">anitya_info_update</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When an upstream project&#39;s metadata is updated</span>
 
 <span class="sd">    Adding this rule will trigger notifications when the information about</span>
@@ -228,7 +228,7 @@
     <span class="k">return</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;topic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;anitya.project.update&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="anitya_by_upstream_project"><a class="viewcode-back" href="../../../rules.html#fmn.rules.anitya.anitya_by_upstream_project">[docs]</a><span class="k">def</span> <span class="nf">anitya_by_upstream_project</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">projects</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+<div class="viewcode-block" id="anitya_by_upstream_project"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.anitya.anitya_by_upstream_project">[docs]</a><span class="k">def</span> <span class="nf">anitya_by_upstream_project</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">projects</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Anything regarding a particular &quot;upstream project&quot;</span>
 
 <span class="sd">    Adding this rule will let through *any* anitya notification that pertains</span>

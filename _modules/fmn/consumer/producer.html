@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fmn.consumer.producer &#8212; FMN 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fmn.consumer.producer</h1><div class="highlight"><pre>
+<span></span><span class="c1"># An example fedmsg koji consumer</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">fmn.lib</span>
+
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;fmn&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="total_seconds"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.producer.total_seconds">[docs]</a><span class="k">def</span> <span class="nf">total_seconds</span><span class="p">(</span><span class="n">dt</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Take a datetime.timedelta object and return the total seconds.</span>
+
+<span class="sd">    dt.total_seconds() exists in the python 2.7 stdlib, but not in python 2.6.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">/</span> <span class="mf">1000000.0</span></div>
+
+
+<div class="viewcode-block" id="FMNProducerBase"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.producer.FMNProducerBase">[docs]</a><span class="k">class</span> <span class="nc">FMNProducerBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An abstract base class for our other producers. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">backends</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> initializing&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backends</span> <span class="o">=</span> <span class="n">backends</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> initialized&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="ConfirmationProducer"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.producer.ConfirmationProducer">[docs]</a><span class="k">class</span> <span class="nc">ConfirmationProducer</span><span class="p">(</span><span class="n">FMNProducerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Handle managing the pending confirmations. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ConfirmationProducer.work"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.producer.ConfirmationProducer.work">[docs]</a>    <span class="k">def</span> <span class="nf">work</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 1) Look for confirmations that need action in the db</span>
+        <span class="n">pending</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Confirmation</span><span class="o">.</span><span class="n">list_pending</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+
+        <span class="c1"># 2) process each one.</span>
+        <span class="k">for</span> <span class="n">confirmation</span> <span class="ow">in</span> <span class="n">pending</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processing confirmation </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">confirmation</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">confirmation</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">backends</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="n">backend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backends</span><span class="p">[</span><span class="n">confirmation</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">backend</span><span class="o">.</span><span class="n">handle_confirmation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">confirmation</span><span class="p">)</span>
+
+        <span class="c1"># 3) clean up any old ones that need to be deleted.</span>
+        <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Confirmation</span><span class="o">.</span><span class="n">delete_expired</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DigestProducer"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.producer.DigestProducer">[docs]</a><span class="k">class</span> <span class="nc">DigestProducer</span><span class="p">(</span><span class="n">FMNProducerBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Handle sending out digests of messages for various contexts. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DigestProducer.work"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.producer.DigestProducer.work">[docs]</a>    <span class="k">def</span> <span class="nf">work</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 1) Loop over all preferences in the db</span>
+        <span class="k">for</span> <span class="n">pref</span> <span class="ow">in</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Preference</span><span class="o">.</span><span class="n">list_batching</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="n">pref</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">backends</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unknown backend in pref: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pref</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># 2) Look for queued messages that need sent by time and count</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">QueuedMessage</span><span class="o">.</span><span class="n">count_for</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">pref</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">pref</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">count</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">earliest</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">QueuedMessage</span><span class="o">.</span><span class="n">earliest_for</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">pref</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">pref</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">earliest</span><span class="o">.</span><span class="n">created_on</span>
+            <span class="n">backend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backends</span><span class="p">[</span><span class="n">pref</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+            <span class="c1"># 2.1) Send and dequeue those by time</span>
+            <span class="k">if</span> <span class="n">pref</span><span class="o">.</span><span class="n">batch_delta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pref</span><span class="o">.</span><span class="n">batch_delta</span> <span class="o">&lt;=</span> <span class="n">total_seconds</span><span class="p">(</span><span class="n">delta</span><span class="p">):</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sending digest for </span><span class="si">%r</span><span class="s2"> per time delta&quot;</span> <span class="o">%</span> <span class="n">pref</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">manage_batch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">pref</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+            <span class="c1"># 2.1) Send and dequeue those by count</span>
+            <span class="k">if</span> <span class="n">pref</span><span class="o">.</span><span class="n">batch_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pref</span><span class="o">.</span><span class="n">batch_count</span> <span class="o">&lt;=</span> <span class="n">count</span><span class="p">:</span>
+                    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sending digest for </span><span class="si">%r</span><span class="s2"> per msg count&quot;</span> <span class="o">%</span> <span class="n">pref</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">manage_batch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">pref</span><span class="p">)</span>
+                    <span class="k">continue</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="DigestProducer.manage_batch"><a class="viewcode-back" href="../../../reference/fmn.consumer.html#fmn.consumer.producer.DigestProducer.manage_batch">[docs]</a>    <span class="k">def</span> <span class="nf">manage_batch</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">pref</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">pref</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">detail_name</span>
+        <span class="n">recipients</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">pref</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">openid</span><span class="p">,</span>
+            <span class="s1">&#39;markup_messages&#39;</span><span class="p">:</span> <span class="n">pref</span><span class="o">.</span><span class="n">markup_messages</span><span class="p">,</span>
+            <span class="s1">&#39;triggered_by_links&#39;</span><span class="p">:</span> <span class="n">pref</span><span class="o">.</span><span class="n">triggered_by_links</span><span class="p">,</span>
+            <span class="s1">&#39;shorten_links&#39;</span><span class="p">:</span> <span class="n">pref</span><span class="o">.</span><span class="n">shorten_links</span><span class="p">,</span>
+        <span class="p">}</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">pref</span><span class="o">.</span><span class="n">detail_values</span><span class="p">]</span>
+
+        <span class="n">queued_messages</span> <span class="o">=</span> <span class="n">fmn</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">QueuedMessage</span><span class="o">.</span><span class="n">list_for</span><span class="p">(</span>
+            <span class="n">session</span><span class="p">,</span> <span class="n">pref</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">pref</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">queued_messages</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Found </span><span class="si">%r</span><span class="s2"> queued messages&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">queued_messages</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">recipient</span> <span class="ow">in</span> <span class="n">recipients</span><span class="p">:</span>
+
+            <span class="c1"># If the preference is disabled, then drop all those queued</span>
+            <span class="c1"># messages.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pref</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Pref </span><span class="si">%r</span><span class="s2"> inactive.  Dropping messages.&quot;</span> <span class="o">%</span> <span class="n">pref</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># If there&#39;s only a single message, then send it in &quot;the usual way&quot;</span>
+            <span class="c1"># See https://github.com/fedora-infra/fmn/issues/91</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">queued_messages</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">queued_messages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span>
+                <span class="n">backend</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">streamline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Otherwise, send it as a batch/digest</span>
+                <span class="n">backend</span><span class="o">.</span><span class="n">handle_batch</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span>
+                                     <span class="p">[</span><span class="n">q</span><span class="o">.</span><span class="n">message</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">queued_messages</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">queued_messages</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">dequeue</span><span class="p">(</span><span class="n">session</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Red Hat, Inc. and others.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

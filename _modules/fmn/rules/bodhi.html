@@ -46,7 +46,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bodhi&#39;</span><span class="p">])</span>
-<div class="viewcode-block" id="bodhi_catchall"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_catchall">[docs]</a><span class="k">def</span> <span class="nf">bodhi_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_catchall"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_catchall">[docs]</a><span class="k">def</span> <span class="nf">bodhi_catchall</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; All bodhi events</span>
 
 <span class="sd">    Adding this rule will indiscriminately match notifications of all types</span>
@@ -57,7 +57,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bodhi&#39;</span><span class="p">],</span> <span class="n">invertible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<div class="viewcode-block" id="bodhi_critpath"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_critpath">[docs]</a><span class="k">def</span> <span class="nf">bodhi_critpath</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_critpath"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_critpath">[docs]</a><span class="k">def</span> <span class="nf">bodhi_critpath</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Critpath updates (of any kind)</span>
 
 <span class="sd">    Adding this rule will allow through notifications about **critpath</span>
@@ -68,7 +68,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.buildroot_override.tag&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_buildroot_override_tag"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_buildroot_override_tag">[docs]</a><span class="k">def</span> <span class="nf">bodhi_buildroot_override_tag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_buildroot_override_tag"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_buildroot_override_tag">[docs]</a><span class="k">def</span> <span class="nf">bodhi_buildroot_override_tag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New buildroot overrides</span>
 
 <span class="sd">    Adding this rule will allow through notifications whenever a user</span>
@@ -79,7 +79,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.buildroot_override.untag&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_buildroot_override_untag"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_buildroot_override_untag">[docs]</a><span class="k">def</span> <span class="nf">bodhi_buildroot_override_untag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_buildroot_override_untag"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_buildroot_override_untag">[docs]</a><span class="k">def</span> <span class="nf">bodhi_buildroot_override_untag</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Buildroot overrides being removed</span>
 
 <span class="sd">    Adding this rule will allow through notifications whenever a user</span>
@@ -90,7 +90,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.comment&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_comment"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_comment">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_comment</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_comment"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_comment">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_comment</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Bodhi comments</span>
 
 <span class="sd">    As part of the QA process, users may comment on updates in</span>
@@ -101,7 +101,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.request.obsolete&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_request_obsolete"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_request_obsolete">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_obsolete</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_request_obsolete"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_request_obsolete">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_obsolete</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Bodhi updates being obsoleted</span>
 
 <span class="sd">    This rule will let through messages from the `Bodhi Updates System</span>
@@ -112,7 +112,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.request.revoke&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_request_revoke"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_request_revoke">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_revoke</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_request_revoke"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_request_revoke">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_revoke</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Bodhi having their request revoked</span>
 
 <span class="sd">    This rule will let through messages from the `Bodhi Updates System</span>
@@ -123,7 +123,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.request.stable&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_request_stable"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_request_stable">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_stable</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_request_stable"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_request_stable">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_stable</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Requests for &quot;stable&quot; status on Bodhi updates</span>
 
 <span class="sd">    This rule will let through messages from the `Bodhi Updates System</span>
@@ -134,7 +134,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.request.testing&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_request_testing"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_request_testing">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_testing</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_request_testing"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_request_testing">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_testing</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New updates requested for updates-testing</span>
 
 <span class="sd">    This rule will let through messages from the `Bodhi Updates System</span>
@@ -145,7 +145,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.request.unpush&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_request_unpush"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_request_unpush">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_unpush</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_request_unpush"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_request_unpush">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_request_unpush</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Requests for Bodhi updates to be unpushed</span>
 
 <span class="sd">    This rule will let through messages from the `Bodhi Updates System</span>
@@ -156,7 +156,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.updates.epel.sync&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_epel_sync"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_epel_sync">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_epel_sync</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_epel_sync"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_epel_sync">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_epel_sync</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New EPEL content has hit the master mirror</span>
 
 <span class="sd">    This rule will let through messages from the `Bodhi Updates System</span>
@@ -167,7 +167,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.updates.fedora.sync&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_fedora_sync"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_fedora_sync">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_fedora_sync</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_fedora_sync"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_fedora_sync">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_fedora_sync</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New Fedora updates content has hit the master mirror</span>
 
 <span class="sd">    This rule will let through messages from the `Bodhi Updates System</span>
@@ -178,7 +178,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.complete.stable&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_complete_stable"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_complete_stable">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_complete_stable</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_complete_stable"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_complete_stable">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_complete_stable</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When updates complete their requested push to &quot;stable&quot;</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -190,7 +190,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.complete.testing&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_complete_testing"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_complete_testing">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_complete_testing</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_complete_testing"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_complete_testing">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_complete_testing</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When updates complete their requested push to &quot;testing&quot;</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -202,7 +202,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.update.eject&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_update_eject"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_update_eject">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_eject</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_update_eject"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_update_eject">[docs]</a><span class="k">def</span> <span class="nf">bodhi_update_eject</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When an update is ejected from the bodhi mash</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -216,7 +216,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.errata.publish&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_errata_publish"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_errata_publish">[docs]</a><span class="k">def</span> <span class="nf">bodhi_errata_publish</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_errata_publish"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_errata_publish">[docs]</a><span class="k">def</span> <span class="nf">bodhi_errata_publish</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; New errata about updates being mashed</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -228,7 +228,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.masher.start&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_masher_start"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_masher_start">[docs]</a><span class="k">def</span> <span class="nf">bodhi_masher_start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_masher_start"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_masher_start">[docs]</a><span class="k">def</span> <span class="nf">bodhi_masher_start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Requests for a new Bodhi mash</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -239,7 +239,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.mashtask.start&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_mashtask_start"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_mashtask_start">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_mashtask_start"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_mashtask_start">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Starts of internal bodhi backend mash tasks</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -250,7 +250,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.mashtask.complete&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_mashtask_complete"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_mashtask_complete">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_complete</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_mashtask_complete"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_mashtask_complete">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_complete</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Ends of internal bodhi backend mash tasks</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -261,7 +261,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.mashtask.mashing&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_mashtask_mashing"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_mashtask_mashing">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_mashing</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_mashtask_mashing"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_mashtask_mashing">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_mashing</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Starts of the mash phase of the mashtask</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -273,7 +273,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.mashtask.sync.wait&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_mashtask_sync_wait"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_mashtask_sync_wait">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_sync_wait</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_mashtask_sync_wait"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_mashtask_sync_wait">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_sync_wait</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When the masher waits for content to sync to the mirrors</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
@@ -285,7 +285,7 @@
 
 
 <span class="nd">@hint</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;bodhi.mashtask.sync.done&#39;</span><span class="p">)])</span>
-<div class="viewcode-block" id="bodhi_mashtask_sync_done"><a class="viewcode-back" href="../../../rules.html#fmn.rules.bodhi.bodhi_mashtask_sync_done">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_sync_done</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<div class="viewcode-block" id="bodhi_mashtask_sync_done"><a class="viewcode-back" href="../../../reference/fmn.rules.html#fmn.rules.bodhi.bodhi_mashtask_sync_done">[docs]</a><span class="k">def</span> <span class="nf">bodhi_mashtask_sync_done</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; When the masher confirms content is on the master mirror</span>
 
 <span class="sd">    This rule will let through messages from the backend of the `Bodhi Updates</span>
