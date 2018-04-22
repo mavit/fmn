@@ -403,7 +403,7 @@ def email(message, recipient):
     if subject_prefix:
         subject = u'{0} {1}'.format(
             subject_prefix.strip(), subject.strip())
-    email_message['Subject'] = subject.encode('utf-8')
+    email_message['Subject'] = subject
 
     timestamp = datetime.datetime.fromtimestamp(message['timestamp'], tz=pytz.utc)
     timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')
@@ -570,9 +570,9 @@ def _add_fmn_headers(email_message, recipient=None, messages=None):
     Returns:
         email.message.Message: The email message object with basic and custom headers set.
     """
-    email_message['From'] = config.app_conf['fmn.email.from_address'].encode('utf-8')
+    email_message['From'] = config.app_conf['fmn.email.from_address']
     if recipient and 'email address' in recipient:
-        email_message['To'] = recipient['email address'].encode('utf-8')
+        email_message['To'] = recipient['email address']
 
     # Although this is a non-standard header and RFC 2076 discourages it, some
     # old clients don't honour RFC 3834 and will auto-respond unless this is set.
@@ -584,10 +584,10 @@ def _add_fmn_headers(email_message, recipient=None, messages=None):
         try:
             topics = set([message['topic'] for message in messages])
             for topic in topics:
-                email_message.add_header('X-Fedmsg-Topic', topic.encode('utf-8'))
+                email_message.add_header('X-Fedmsg-Topic', topic)
             categories = set([topic.split('.')[3] for topic in topics])
             for cat in categories:
-                email_message.add_header('X-Fedmsg-Category', cat.encode('utf-8'))
+                email_message.add_header('X-Fedmsg-Category', cat)
         except Exception:
             _log.exception('Unable to parse message topic and category for %r', messages)
 
@@ -607,10 +607,10 @@ def _add_fmn_headers(email_message, recipient=None, messages=None):
                 _log.exception('fedmsg.meta.msg2packages failed to handle %r', msg)
 
         for username in sorted(list(usernames)):
-            email_message.add_header('X-Fedmsg-Username', username.encode('utf-8'))
+            email_message.add_header('X-Fedmsg-Username', username)
 
         for pkg in list(packages)[:10]:
-            email_message.add_header('X-Fedmsg-Package', pkg.encode('utf-8'))
-        email_message.add_header('X-Fedmsg-Num-Packages', str(len(packages)).encode('utf-8'))
+            email_message.add_header('X-Fedmsg-Package', pkg)
+        email_message.add_header('X-Fedmsg-Num-Packages', str(len(packages)))
 
     return email_message
