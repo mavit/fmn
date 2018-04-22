@@ -390,7 +390,7 @@ def email(message, recipient):
     Returns:
         str: The email as a unicode string.
     """
-    email_message = _add_fmn_headers(MIMENonMultipart('text','plain'),
+    email_message = _add_fmn_headers(MIMENonMultipart('text', 'plain'),
                                      recipient=recipient,
                                      messages=[message])
 
@@ -447,7 +447,7 @@ def email_batch(messages, recipient):
         return email(messages[0], recipient)
 
     if len(messages) >= 1000:
-        email_message = _add_fmn_headers(MIMENonMultipart('text','plain'),
+        email_message = _add_fmn_headers(MIMENonMultipart('text', 'plain'),
                                          recipient=recipient)
         email_message['Subject'] = u'Fedora Notifications Digest error'
         digest_error = (u'Too many messages were queued to be sent in this digest ({n})!\n'
@@ -480,12 +480,12 @@ def email_batch(messages, recipient):
             # Enclose the message in a 'message/rfc822' container
             digest.attach(MIMEMessage(digest_message))
 
-        summary_message = MIMENonMultipart('text','plain')
+        summary_message = MIMENonMultipart('text', 'plain')
         summary_message.set_payload(u'\n'.join(summary).encode('utf-8'), 'utf-8')
         email_message.attach(summary_message)
         email_message.attach(digest)
     else:
-        email_message = _add_fmn_headers(MIMENonMultipart('text','plain'),
+        email_message = _add_fmn_headers(MIMENonMultipart('text', 'plain'),
                                          recipient=recipient,
                                          messages=messages)
         email_message['Subject'] = (u'Fedora Notifications Recap '
@@ -514,7 +514,7 @@ def email_batch(messages, recipient):
 
     if getsizeof(email_message.as_string()) > 5000000:
         # This email is too large to be sent.
-        email_message = _add_fmn_headers(MIMENonMultipart('text','plain'),
+        email_message = _add_fmn_headers(MIMENonMultipart('text', 'plain'),
                                          recipient=recipient)
         email_message['Subject'] = u'Fedora Notifications Digest error'
         digest_error = (u'This message digest was too large to be sent!\n'
@@ -536,7 +536,7 @@ def email_confirmation(confirmation):
     Returns:
         str: The email to send as a string.
     """
-    email_message = _add_fmn_headers(MIMENonMultipart('text','plain'))
+    email_message = _add_fmn_headers(MIMENonMultipart('text', 'plain'))
     email_message['To'] = confirmation.detail_value
     email_message['Subject'] = u'Confirm notification email'
     acceptance_url = config.app_conf['fmn.acceptance_url'].format(
@@ -560,7 +560,7 @@ def _add_fmn_headers(email_message, recipient=None, messages=None):
     Add basic headers to mark the email as auto-generated.
     If a recipient is provided, add it to 'To' header.
     If a list of messages is provided, add related custom FMN headers.
-    
+
     Args:
         email_message (email.message.Message): The email message to customize
         recipient (dict): A dictionary containing (at a minimum) the

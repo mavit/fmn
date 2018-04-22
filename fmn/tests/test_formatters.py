@@ -326,14 +326,15 @@ class EmailTests(Base):
 
     def test_basic_email_headers(self):
         """Assert the basic email has the auto-generation headers."""
-        message = formatters._add_fmn_headers(MIMENonMultipart('text','plain'))
+        message = formatters._add_fmn_headers(MIMENonMultipart('text', 'plain'))
 
         self.assertEqual(message['Auto-Submitted'], 'auto-generated')
         self.assertEqual(message['Precedence'], 'Bulk')
         self.assertEqual(message['From'], 'notifications@fedoraproject.org')
 
     @mock.patch('fmn.formatters.fedmsg.meta.msg2subtitle', mock.Mock(return_value=u'Sùbtìtlè'))
-    @mock.patch('fmn.formatters.fedmsg.meta.msg2usernames', mock.Mock(return_value=[u'→Usèrnàmè←',]))
+    @mock.patch('fmn.formatters.fedmsg.meta.msg2usernames',
+                mock.Mock(return_value=[u'→Usèrnàmè←', ]))
     def test_internationalized_headers(self):
         """Assert headers containing utf-8 chars are correctly set."""
         expected = (
