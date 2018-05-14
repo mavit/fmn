@@ -24,6 +24,8 @@ import fedmsg.meta
 import mock
 import requests
 from email.mime.nonmultipart import MIMENonMultipart
+from base64 import b64encode
+from textwrap import fill
 
 from . import Base
 from fmn import formatters
@@ -349,11 +351,13 @@ class EmailTests(Base):
             'X-Fedmsg-Username: =?utf-8?b?4oaSVXPDqHJuw6Btw6jihpA=?=\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: =?utf-8?b?U8O5YnTDrHRsw6g=?=\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -405,11 +409,13 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -430,10 +436,14 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'VGhpcyBtZXNzYWdlIHdhcyB0b28gbGFyZ2UgdG8gYmUgc2VudCEKVGhlIG1lc3NhZ2UgSUQgd2Fz\n'
-            'OiAyMDE3LTZhYTcxZDViLWZiZTQtNDllNy1hZmRkLWFmY2YwZDIyODAyYgoK\n'
+            + fill(b64encode(
+                'This message was too large to be sent!\n'
+                'The message ID was: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
+                '\n'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -454,11 +464,13 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: PREFIX: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -476,9 +488,9 @@ class EmailTests(Base):
             'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: fedmsg notification\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoK\n'
         )
         self.message['topic'] = 'so.short'
 
@@ -500,11 +512,13 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: fedmsg notification\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -524,11 +538,13 @@ class EmailTests(Base):
             'X-Fedmsg-Id: 2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -550,11 +566,13 @@ class EmailTests(Base):
             'X-Fedmsg-Package: pkg\n'
             'X-Fedmsg-Num-Packages: 1\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -575,11 +593,13 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -600,16 +620,23 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKewogICAg\n'
-            'Im1zZyI6IHsKICAgICAgICAiY2hhbmdlZCI6ICJydWxlcyIsIAogICAgICAgICJjb250ZXh0Ijog\n'
-            'ImVtYWlsIiwgCiAgICAgICAgIm9wZW5pZCI6ICJqY2xpbmUuaWQuZmVkb3JhcHJvamVjdC5vcmci\n'
-            'CiAgICB9LCAKICAgICJtc2dfaWQiOiAiMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZkZC1hZmNm\n'
-            'MGQyMjgwMmIiLCAKICAgICJ0aW1lc3RhbXAiOiAxNTA3MzEwNzMwLCAKICAgICJ0b3BpYyI6ICJv\n'
-            'cmcuZmVkb3JhcHJvamVjdC5kZXYuZm1uLmZpbHRlci51cGRhdGUiLCAKICAgICJ1c2VybmFtZSI6\n'
-            'ICJ2YWdyYW50Igp9CglodHRwczovL2FwcHMuZmVkb3JhcHJvamVjdC5vcmcvbm90aWZpY2F0aW9u\n'
-            'cy8=\n'
+            + fill(b64encode(
+                '{\n'
+                '    "msg": {\n'
+                '        "changed": "rules", \n'
+                '        "context": "email", \n'
+                '        "openid": "jcline.id.fedoraproject.org"\n'
+                '    }, \n'
+                '    "msg_id": "2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b", \n'
+                '    "timestamp": 1507310730, \n'
+                '    "topic": "org.fedoraproject.dev.fmn.filter.update", \n'
+                '    "username": "vagrant"\n'
+                '}\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -630,10 +657,12 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcg==\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter'
+            ), 76) + '\n'
         )
 
         actual = formatters.email(self.message, self.recipient)
@@ -653,13 +682,18 @@ class EmailTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMvCgotLQpZb3UgcmVjZWl2ZWQgdGhpcyBtZXNz\n'
-            'YWdlIGR1ZSB0byB5b3VyIHByZWZlcmVuY2Ugc2V0dGluZ3MgYXQgCmh0dHA6Ly9sb2NhbGhvc3Q6\n'
-            'NTAwMC9qY2xpbmUuaWQuZmVkb3JhcHJvamVjdC5vcmcvZW1haWwvMTE=\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/\n'
+                '\n'
+                '--\n'
+                'You received this message due to your preference settings at \n'
+                'http://localhost:5000/jcline.id.fedoraproject.org/email/11'
+            ), 76) + '\n'
+
         )
         self.recipient['triggered_by_links'] = True
 
@@ -767,11 +801,13 @@ class EmailBatchTests(Base):
             'X-Fedmsg-Username: jcline\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: jcline updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKamNsaW5l\n'
-            'IHVwZGF0ZWQgdGhlIHJ1bGVzIG9uIGEgZm1uIGVtYWlsIGZpbHRlcgoJaHR0cHM6Ly9hcHBzLmZl\n'
-            'ZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n\n'
+            + fill(b64encode(
+                'jcline updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n\n' +
             '--=======next_message_in_digest==\n'
             'Content-Type: message/rfc822\n'
             'MIME-Version: 1.0\n\n'
@@ -786,11 +822,13 @@ class EmailBatchTests(Base):
             'X-Fedmsg-Username: bowlofeggs\n'
             'X-Fedmsg-Num-Packages: 0\n'
             'Subject: bowlofeggs updated the rules on a fmn email filter\n'
+            'Date: Fri, 06 Oct 2017 17:25:30 -0000\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'Tm90aWZpY2F0aW9uIHRpbWUgc3RhbXBlZCAyMDE3LTEwLTA2IDE3OjI1OjMwIFVUQwoKYm93bG9m\n'
-            'ZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBmaWx0ZXIKCWh0dHBzOi8vYXBw\n'
-            'cy5mZWRvcmFwcm9qZWN0Lm9yZy9ub3RpZmljYXRpb25zLw==\n\n'
+            + fill(b64encode(
+                'bowlofeggs updated the rules on a fmn email filter\n'
+                '\thttps://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n\n' +
             '--=======next_message_in_digest==--\n\n'
             '--=======fmn_email_boundary==--\n'
         )
