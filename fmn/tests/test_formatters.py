@@ -380,15 +380,17 @@ class EmailTests(Base):
             'Subject: Confirm notification email\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'amNsaW5lLmlkLmZlZG9yYXByb2plY3Qub3JnIGhhcyByZXF1ZXN0ZWQgdGhhdCBub3RpZmljYXRp\n'
-            'b25zIGJlIHNlbnQgdG8gdGhpcyBlbWFpbCBhZGRyZXNzCiogVG8gYWNjZXB0LCB2aXNpdCB0aGlz\n'
-            'IGFkZHJlc3M6CiAgaHR0cDovL2xvY2FsaG9zdDo1MDAwL2NvbmZpcm0vYWNjZXB0L2FhYWFhYWFh\n'
-            'YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhCiogT3IsIHRvIHJlamVjdCB5b3UgY2FuIHZpc2l0IHRo\n'
-            'aXMgYWRkcmVzczoKICBodHRwOi8vbG9jYWxob3N0OjUwMDAvY29uZmlybS9yZWplY3QvYWFhYWFh\n'
-            'YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEKQWx0ZXJuYXRpdmVseSwgeW91IGNhbiBpZ25vcmUg\n'
-            'dGhpcy4gIFRoaXMgaXMgYW4gYXV0b21hdGVkIG1lc3NhZ2UsIHBsZWFzZQplbWFpbCBub3RpZmlj\n'
-            'YXRpb25zQGZlZG9yYXByb2plY3Qub3JnIGlmIHlvdSBoYXZlIGFueSBjb25jZXJucy9pc3N1ZXMv\n'
-            'YWJ1c2Uu\n'
+            + fill(b64encode(
+                'jcline.id.fedoraproject.org has requested that notifications '
+                'be sent to this email address\n'
+                '* To accept, visit this address:\n'
+                '  http://localhost:5000/confirm/accept/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n'
+                '* Or, to reject you can visit this address:\n'
+                '  http://localhost:5000/confirm/reject/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n'
+                'Alternatively, you can ignore this.  This is an automated message, please\n'
+                'email notifications@fedoraproject.org if you have any concerns/issues/abuse.'
+            ), 76) + '\n'
+
         )
 
         message = formatters.email_confirmation(confirmation)
@@ -781,9 +783,11 @@ class EmailBatchTests(Base):
             'MIME-Version: 1.0\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'RGlnZXN0IFN1bW1hcnk6CjEuCWpjbGluZSB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFp\n'
-            'bCBmaWx0ZXIKMi4JYm93bG9mZWdncyB1cGRhdGVkIHRoZSBydWxlcyBvbiBhIGZtbiBlbWFpbCBm\n'
-            'aWx0ZXI=\n\n'
+            + fill(b64encode(
+                'Digest Summary:\n'
+                '1.\tjcline updated the rules on a fmn email filter\n'
+                '2.\tbowlofeggs updated the rules on a fmn email filter'
+            ), 76) + '\n\n' +
             '--=======fmn_email_boundary==\n'
             'Content-Type: multipart/digest; boundary="=======next_message_in_digest=="\n'
             'MIME-Version: 1.0\n\n'
@@ -854,12 +858,15 @@ class EmailBatchTests(Base):
             'Subject: Fedora Notifications Recap (2 updates)\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'KDIwMTctMTAtMDYgMTc6MjU6MzAgVVRDKSBqY2xpbmUgdXBkYXRlZCB0aGUgcnVsZXMgb24gYSBm\n'
-            'bW4gZW1haWwgZmlsdGVyCi0gaHR0cHM6Ly9hcHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNh\n'
-            'dGlvbnMvCgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t\n'
-            'LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgooMjAxNy0xMC0wNiAxNzoyNTozMCBVVEMp\n'
-            'IGJvd2xvZmVnZ3MgdXBkYXRlZCB0aGUgcnVsZXMgb24gYSBmbW4gZW1haWwgZmlsdGVyCi0gaHR0\n'
-            'cHM6Ly9hcHBzLmZlZG9yYXByb2plY3Qub3JnL25vdGlmaWNhdGlvbnMv\n'
+            + fill(b64encode(
+                '(2017-10-06 17:25:30 UTC) jcline updated the rules on a fmn email filter\n'
+                '- https://apps.fedoraproject.org/notifications/\n'
+                '\n'
+                '-------------------------------------------------------------------------------\n'
+                '\n'
+                '(2017-10-06 17:25:30 UTC) bowlofeggs updated the rules on a fmn email filter\n'
+                '- https://apps.fedoraproject.org/notifications/'
+            ), 76) + '\n'
         )
 
         actual = formatters.email_batch(self.messages, self.not_verbose_recipient)
@@ -877,8 +884,10 @@ class EmailBatchTests(Base):
             'Subject: Fedora Notifications Digest error\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'VG9vIG1hbnkgbWVzc2FnZXMgd2VyZSBxdWV1ZWQgdG8gYmUgc2VudCBpbiB0aGlzIGRpZ2VzdCAo\n'
-            'MTAwMCkhCkNvbnNpZGVyIGFkanVzdGluZyB5b3VyIEZNTiBzZXR0aW5ncy4K\n'
+            + fill(b64encode(
+                'Too many messages were queued to be sent in this digest (1000)!\n'
+                'Consider adjusting your FMN settings.\n'
+            ), 76) + '\n'
         )
 
         actual = formatters.email_batch(big_batch, self.verbose_recipient)
@@ -896,9 +905,13 @@ class EmailBatchTests(Base):
             'Subject: Fedora Notifications Digest error\n'
             'Content-Type: text/plain; charset="utf-8"\n'
             'Content-Transfer-Encoding: base64\n\n'
-            'VGhpcyBtZXNzYWdlIGRpZ2VzdCB3YXMgdG9vIGxhcmdlIHRvIGJlIHNlbnQhClRoZSBmb2xsb3dp\n'
-            'bmcgbWVzc2FnZXMgd2VyZSBiYXRjaGVkOgoKMjAxNy02YWE3MWQ1Yi1mYmU0LTQ5ZTctYWZkZC1h\n'
-            'ZmNmMGQyMjgwMmIKMjAxNy02YWE3MWQ1Yi1hYWFhLWJiYmItY2NjYy1hZmNmMGQyMjgwMnoK\n'
+            + fill(b64encode(
+                'This message digest was too large to be sent!\n'
+                'The following messages were batched:\n'
+                '\n'
+                '2017-6aa71d5b-fbe4-49e7-afdd-afcf0d22802b\n'
+                '2017-6aa71d5b-aaaa-bbbb-cccc-afcf0d22802z\n'
+            ), 76) + '\n'
         )
 
         actual = formatters.email_batch(self.messages, self.verbose_recipient)
